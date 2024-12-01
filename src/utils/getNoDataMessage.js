@@ -20,12 +20,14 @@ such restriction.
 import { isEqual, keyBy } from 'lodash'
 import { formatDate } from './datePicker.util'
 import {
+  ALERTS_PAGE,
   ADD_TO_FEATURE_VECTOR_TAB,
   ANY_TIME,
   DATASETS_PAGE,
   DATE_FILTER_ANY_TIME,
   DATE_RANGE_TIME_FILTER,
   ENTITIES_FILTER,
+  ENTITY_TYPE,
   FEATURE_SETS_TAB,
   FEATURE_VECTORS_TAB,
   FEATURES_TAB,
@@ -49,11 +51,13 @@ import {
   TAG_FILTER_ALL_ITEMS,
   DATES_FILTER,
   PROJECT_FILTER,
+  PROJECTS_FILTER,
   TYPE_FILTER,
   CONSUMER_GROUP_PAGE,
   CONSUMER_GROUPS_PAGE,
   MONITOR_JOBS_TAB,
-  SCHEDULE_TAB
+  SCHEDULE_TAB,
+  ENTITY_ID
 } from '../constants'
 
 const messageNamesList = {
@@ -105,10 +109,24 @@ const messageNamesList = {
   [CONSUMER_GROUPS_PAGE]: {
     plural: 'Consumer groups'
   },
+  [ALERTS_PAGE]: {
+    plural: 'Alerts'
+  },
   default: ''
 }
 
-export const getNoDataMessage = (filters, filtersConfig, defaultMessage, page, tab, filtersStore) => {
+export const getNoDataMessage = (
+  filters,
+  filtersConfig,
+  defaultMessage,
+  page,
+  tab,
+  filtersStore
+) => {
+  console.log({ filters })
+  console.log({ filtersConfig })
+  console.log({ filtersStore })
+
   if (defaultMessage) return defaultMessage
 
   if (Array.isArray(filtersConfig)) {
@@ -176,8 +194,12 @@ const getVisibleFilterTypes = (filtersConfig, filters, filtersStore) => {
       (type === NAME_FILTER ||
         type === LABELS_FILTER ||
         type === ENTITIES_FILTER ||
-        type === PROJECT_FILTER) &&
-      filters[type]?.length > 0
+        type === PROJECT_FILTER ||
+        type === PROJECTS_FILTER ||
+        type === ENTITY_TYPE ||
+        type === ENTITY_ID) &&
+      filters[type]?.length > 0 &&
+      filters[type] !== 'all'
     const isStatusVisible =
       type === STATUS_FILTER && !isEqual(filters[STATUS_FILTER], [FILTER_ALL_ITEMS])
     const isTypeVisible = type === TYPE_FILTER && !isEqual(filters[TYPE_FILTER], FILTER_ALL_ITEMS)
@@ -185,9 +207,7 @@ const getVisibleFilterTypes = (filtersConfig, filters, filtersStore) => {
       (type === DATE_RANGE_TIME_FILTER &&
         !isEqual(filters[DATES_FILTER]?.value, DATE_FILTER_ANY_TIME)) ||
       (type === DATES_FILTER && !isEqual(filters[DATES_FILTER]?.value, DATE_FILTER_ANY_TIME))
-    const isShowUntaggedVisible =
-      type === SHOW_UNTAGGED_FILTER &&
-      !filters[SHOW_UNTAGGED_FILTER]
+    const isShowUntaggedVisible = type === SHOW_UNTAGGED_FILTER && !filters[SHOW_UNTAGGED_FILTER]
     const isGroupByVisible = type === GROUP_BY_FILTER && filtersStore.groupBy !== GROUP_BY_NONE
 
     return (
