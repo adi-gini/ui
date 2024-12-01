@@ -60,7 +60,9 @@ import {
   ENTITY_ID,
   JOB_NAME,
   SEVERITY,
-  EVENT_TYPE
+  EVENT_TYPE,
+  ENDPOINT_APPLICATION,
+  ENDPOINT_RESULT
 } from '../constants'
 
 const messageNamesList = {
@@ -206,6 +208,8 @@ const getVisibleFilterTypes = (filtersConfig, filters, filtersStore) => {
         type === ENTITY_TYPE ||
         type === ENTITY_ID ||
         type === JOB_NAME ||
+        type === ENDPOINT_APPLICATION ||
+        type === ENDPOINT_RESULT ||
         type === EVENT_TYPE) &&
       filters[type]?.length > 0 &&
       filters[type] !== 'all'

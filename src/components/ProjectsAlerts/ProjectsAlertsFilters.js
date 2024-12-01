@@ -17,7 +17,7 @@ illegal under applicable law, and the grant of the foregoing license
 under the Apache 2.0 license is conditioned upon your compliance with
 such restriction.
 */
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { truncate, upperFirst } from 'lodash'
 import { useForm, useFormState } from 'react-final-form'
@@ -56,6 +56,10 @@ const ProjectsAlertsFilters = () => {
     values: { [ENTITY_TYPE]: entityType }
   } = useFormState()
 
+  const [filteredEventTypeOptions, setFilteredEventTypeOptions] = useState(
+    filterAlertsEventTypeOptions
+  )
+
   const projectStore = useSelector(state => state.projectStore)
 
   const projectsList = useMemo(() => {
@@ -78,6 +82,18 @@ const ProjectsAlertsFilters = () => {
     const allFields = [ENTITY_ID, JOB_NAME, ENDPOINT_APPLICATION, ENDPOINT_RESULT]
     return allFields.filter(field => !(fieldsByType[entityType] ?? []).includes(field))
   }, [])
+
+  useEffect(() => {
+    const filterOptionsByEntityType = {
+      [JOB]: filterAlertsEventTypeOptions.filter(option => option.id === 'job-failed'),
+      [ENDPOINT]: filterAlertsEventTypeOptions.filter(option => option.id !== 'job-failed'),
+      default: filterAlertsEventTypeOptions
+    }
+    setFilteredEventTypeOptions(
+      filterOptionsByEntityType[entityType] || filterOptionsByEntityType.default
+    )
+    form.change(EVENT_TYPE)
+  }, [entityType, form])
 
   useEffect(() => {
     getFieldsToReset(entityType).forEach(field => form.change(field, ''))
@@ -142,7 +158,7 @@ const ProjectsAlertsFilters = () => {
         <StatusFilter statusList={filterAlertsSeverityOptions} name={SEVERITY} />
       </div>
       <div className="form-row">
-        <FormSelect label="Event type" name={EVENT_TYPE} options={filterAlertsEventTypeOptions} />
+        <FormSelect label="Event type" name={EVENT_TYPE} options={filteredEventTypeOptions} />
       </div>
     </>
   )
