@@ -71,7 +71,7 @@ const ProjectsAlerts = () => {
       )
         .unwrap()
         .then(data => {
-          setAlerts(data)
+          setAlerts([])
         })
     },
     [dispatch, params.id]

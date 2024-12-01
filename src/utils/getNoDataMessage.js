@@ -57,7 +57,10 @@ import {
   CONSUMER_GROUPS_PAGE,
   MONITOR_JOBS_TAB,
   SCHEDULE_TAB,
-  ENTITY_ID
+  ENTITY_ID,
+  JOB_NAME,
+  SEVERITY,
+  EVENT_TYPE
 } from '../constants'
 
 const messageNamesList = {
@@ -190,6 +193,10 @@ const getVisibleFilterTypes = (filtersConfig, filters, filtersStore) => {
     const isTagVisible = type === TAG_FILTER && filters[TAG_FILTER] !== TAG_FILTER_ALL_ITEMS
     const isIterVisible =
       type === ITERATIONS_FILTER && filters[ITERATIONS_FILTER] === SHOW_ITERATIONS
+    const isSeverityVisible =
+      type === SEVERITY && filters[SEVERITY]?.length > 0 && filters[SEVERITY][0] !== 'all'
+    console.log(filters[SEVERITY][0] !== 'all')
+
     const isInputVisible =
       (type === NAME_FILTER ||
         type === LABELS_FILTER ||
@@ -197,7 +204,9 @@ const getVisibleFilterTypes = (filtersConfig, filters, filtersStore) => {
         type === PROJECT_FILTER ||
         type === PROJECTS_FILTER ||
         type === ENTITY_TYPE ||
-        type === ENTITY_ID) &&
+        type === ENTITY_ID ||
+        type === JOB_NAME ||
+        type === EVENT_TYPE) &&
       filters[type]?.length > 0 &&
       filters[type] !== 'all'
     const isStatusVisible =
@@ -216,6 +225,7 @@ const getVisibleFilterTypes = (filtersConfig, filters, filtersStore) => {
       isInputVisible ||
       isStatusVisible ||
       isTypeVisible ||
+      isSeverityVisible ||
       isDateVisible ||
       isShowUntaggedVisible ||
       isGroupByVisible
