@@ -59,7 +59,7 @@ import 'igz-controls/scss/common.scss'
 import './scss/main.scss'
 import { createPortal } from 'react-dom'
 
-import Notification from './common/Notification/Notification'
+import Notifications from './common/Notifications/Notifications'
 
 const Page = lazyRetry(() => import('./layout/Page/Page'))
 const CreateJobPage = lazyRetry(() => import('./components/CreateJobPage/CreateJobPage'))
@@ -103,6 +103,7 @@ const FeatureVectors = lazyRetry(
 const ProjectsJobsMonitoring = lazyRetry(
   () => import('./components/ProjectsJobsMonitoring/ProjectsJobsMonitoring')
 )
+const ProjectsAlerts = lazyRetry(() => import('./components/ProjectsAlerts/ProjectsAlerts'))
 const JobsMonitoring = lazyRetry(
   () => import('./components/ProjectsJobsMonitoring/JobsMonitoring/JobsMonitoring')
 )
@@ -151,6 +152,9 @@ const App = () => {
           </Route>
           <Route path="projects/:projectName" element={<Navigate replace to={PROJECT_MONITOR} />} />
           <Route path={`projects/:projectName/${PROJECT_MONITOR}`} element={<ProjectMonitor />} />
+
+          {/*TODO: the Alerts Route will be updated with ML-8368 */}
+          <Route path="projects/:id/alerts" element={<ProjectsAlerts />} />
 
           {!isNuclioModeDisabled && (
             <Route
@@ -303,7 +307,7 @@ const App = () => {
         <Suspense fallback={<LoaderForSuspenseFallback />}>
           <RouterProvider router={router} />
         </Suspense>
-        {createPortal(<Notification />, document.getElementById('overlay_container'))}
+        {createPortal(<Notifications />, document.getElementById('overlay_container'))}
       </div>
     </div>
   )

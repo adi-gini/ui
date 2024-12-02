@@ -17,7 +17,7 @@ illegal under applicable law, and the grant of the foregoing license
 under the Apache 2.0 license is conditioned upon your compliance with
 such restriction.
 */
-import React, { useReducer, useCallback, useEffect, useMemo } from 'react'
+import React, { useReducer, useCallback, useEffect, useMemo, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
@@ -37,12 +37,20 @@ import {
 
 const DetailsInfo = React.forwardRef(
   (
-    { detailsStore, formState, pageData, selectedItem, setChangesData, setChangesCounter },
+    {
+      detailsStore,
+      formState,
+      isDetailsPopUp,
+      pageData,
+      selectedItem,
+      setChangesCounter,
+      setChangesData
+    },
     applyChangesRef
   ) => {
     const [detailsInfoState, detailsInfoDispatch] = useReducer(detailsInfoReducer, initialState)
     const params = useParams()
-    const editItemRef = React.createRef()
+    const editItemRef = useRef()
     const dispatch = useDispatch()
 
     const onApplyChanges = useCallback(
@@ -102,7 +110,10 @@ const DetailsInfo = React.forwardRef(
       [params.projectName, selectedItem]
     )
 
-    const producer = useMemo(() => generateProducerDetailsInfo(selectedItem), [selectedItem])
+    const producer = useMemo(
+      () => generateProducerDetailsInfo(selectedItem, isDetailsPopUp),
+      [selectedItem, isDetailsPopUp]
+    )
 
     const drift = useMemo(() => generateDriftDetailsInfo(selectedItem), [selectedItem])
 
@@ -138,6 +149,7 @@ const DetailsInfo = React.forwardRef(
         handleDiscardChanges={handleDiscardChanges}
         handleFinishEdit={finishEdit}
         handleInfoItemClick={handleInfoItemClick}
+        isDetailsPopUp={isDetailsPopUp}
         pageData={pageData}
         params={params}
         ref={editItemRef}

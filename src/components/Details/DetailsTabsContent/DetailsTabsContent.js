@@ -68,8 +68,10 @@ import {
 
 const DetailsTabsContent = ({
   applyChangesRef,
+  detailsPopUpSelectedTab = '',
   formState,
   handlePreview,
+  isDetailsPopUp = false,
   pageData,
   selectedItem,
   setChanges,
@@ -81,12 +83,13 @@ const DetailsTabsContent = ({
   const detailsStore = useSelector(store => store.detailsStore)
   const params = useParams()
 
-  switch (params.tab) {
+  switch (isDetailsPopUp ? detailsPopUpSelectedTab : params.tab) {
     case DETAILS_OVERVIEW_TAB:
       return (
         <DetailsInfo
           detailsStore={detailsStore}
           formState={formState}
+          isDetailsPopUp={isDetailsPopUp}
           pageData={pageData}
           ref={applyChangesRef}
           selectedItem={selectedItem}
@@ -121,13 +124,19 @@ const DetailsTabsContent = ({
     case DETAILS_PREVIEW_TAB:
       return <DetailsPreview artifact={selectedItem} handlePreview={handlePreview} />
     case DETAILS_INPUTS_TAB:
-      return <DetailsInputs inputs={selectedItem.inputs} />
+      return (
+        <DetailsInputs
+          inputs={selectedItem.inputs}
+          isDetailsPopUp={isDetailsPopUp}
+        />
+      )
     case DETAILS_ARTIFACTS_TAB:
       return (
         <DetailsArtifacts
           allowSortBy={['name', 'updated']}
           defaultSortBy="name"
           defaultDirection="asc"
+          isDetailsPopUp={isDetailsPopUp}
           iteration={detailsStore.iteration}
           selectedItem={selectedItem}
           setIteration={setIteration}
@@ -219,6 +228,7 @@ const DetailsTabsContent = ({
         <DetailsRequestedFeatures
           changes={detailsStore.changes}
           formState={formState}
+          isDetailsPopUp={isDetailsPopUp}
           selectedItem={selectedItem}
           setChanges={setChanges}
           setChangesData={setChangesData}

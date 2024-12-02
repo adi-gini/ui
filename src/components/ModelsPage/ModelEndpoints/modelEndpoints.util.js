@@ -27,7 +27,7 @@ import { fetchModelEndpoint } from '../../../reducers/artifactsReducer'
 import { ReactComponent as Alert } from 'igz-controls/images/alerts.svg'
 
 export const filtersConfig = {
-  [LABELS_FILTER]: { label: 'Labels:' }
+  [LABELS_FILTER]: { label: 'Labels:', initialValue: '', isModal: true }
 }
 
 const infoHeaders = [

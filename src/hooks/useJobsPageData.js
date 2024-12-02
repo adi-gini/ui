@@ -18,13 +18,16 @@ under the Apache 2.0 license is conditioned upon your compliance with
 such restriction.
 */
 import { useCallback, useRef, useState } from 'react'
-import { parseJob } from '../utils/parseJob'
-import { FILTER_ALL_ITEMS, GROUP_BY_WORKFLOW, JOB_KIND_LOCAL, SCHEDULE_TAB } from '../constants'
-import { monitorJob, pollAbortingJobs, rerunJob } from '../components/Jobs/jobs.util'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+
+import { monitorJob, pollAbortingJobs, rerunJob } from '../components/Jobs/jobs.util'
+
+import { getJobKindFromLabels } from '../utils/jobs.util'
+import { parseJob } from '../utils/parseJob'
 import jobsActions from '../actions/jobs'
 import workflowActions from '../actions/workflow'
+import { FILTER_ALL_ITEMS, GROUP_BY_WORKFLOW, JOB_KIND_LOCAL, SCHEDULE_TAB } from '../constants'
 
 export const useJobsPageData = (fetchAllJobRuns, fetchJobFunction, fetchJobs) => {
   const [jobRuns, setJobRuns] = useState([])
@@ -33,11 +36,9 @@ export const useJobsPageData = (fetchAllJobRuns, fetchJobFunction, fetchJobs) =>
   const [jobWizardIsOpened, setJobWizardIsOpened] = useState(false)
   const [jobs, setJobs] = useState([])
   const [abortingJobs, setAbortingJobs] = useState({})
-  const [dateFilter, setDateFilter] = useState(['', ''])
   const abortControllerRef = useRef(new AbortController())
   const abortJobRef = useRef(null)
   const params = useParams()
-  const [selectedRunProject, setSelectedRunProject] = useState(params.projectName || '')
   const [requestErrorMessage, setRequestErrorMessage] = useState('')
   const [scheduledJobs, setScheduledJobs] = useState([])
   const dispatch = useDispatch()
@@ -60,10 +61,6 @@ export const useJobsPageData = (fetchAllJobRuns, fetchJobFunction, fetchJobs) =>
 
       terminateAbortTasksPolling()
 
-      if (filters.dates) {
-        setDateFilter(filters.dates.value)
-      }
-
       const fetchData = params.jobName ? fetchAllJobRuns : fetchJobs
       const newParams = !params.jobName && {
         'partition-by': 'project_and_name',
@@ -71,11 +68,7 @@ export const useJobsPageData = (fetchAllJobRuns, fetchJobFunction, fetchJobs) =>
       }
 
       fetchData(
-        params.jobName
-          ? selectedRunProject || '*'
-          : filters.project
-            ? filters.project.toLowerCase()
-            : params.projectName || '*',
+        filters.project?.toLowerCase?.() || params.projectName || '*',
         filters,
         {
           ui: {
@@ -90,9 +83,7 @@ export const useJobsPageData = (fetchAllJobRuns, fetchJobFunction, fetchJobs) =>
           const parsedJobs = jobs
             .map(job => parseJob(job))
             .filter(job => {
-              const type =
-                job.labels?.find(label => label.includes('kind:'))?.replace('kind: ', '') ??
-                JOB_KIND_LOCAL
+              const type = getJobKindFromLabels(job.labels) ?? JOB_KIND_LOCAL
 
               return (
                 (!filters.type ||
@@ -115,11 +106,7 @@ export const useJobsPageData = (fetchAllJobRuns, fetchJobFunction, fetchJobs) =>
           if (Object.keys(responseAbortingJobs).length > 0) {
             setAbortingJobs(responseAbortingJobs)
             pollAbortingJobs(
-              params.jobName
-                ? selectedRunProject || '*'
-                : filters.project
-                  ? filters.project.toLowerCase()
-                  : params.projectName || '*',
+              filters.project?.toLowerCase?.() || params.projectName || '*',
               abortJobRef,
               responseAbortingJobs,
               () => refreshJobs(filters),
@@ -141,7 +128,6 @@ export const useJobsPageData = (fetchAllJobRuns, fetchJobFunction, fetchJobs) =>
       fetchJobs,
       params.jobName,
       params.projectName,
-      selectedRunProject,
       terminateAbortTasksPolling
     ]
   )
@@ -198,17 +184,13 @@ export const useJobsPageData = (fetchAllJobRuns, fetchJobFunction, fetchJobs) =>
   )
 
   const getWorkflows = useCallback(
-    filter => {
+    filters => {
       abortControllerRef.current = new AbortController()
-
-      if (filter.dates) {
-        setDateFilter(filter.dates.value)
-      }
 
       dispatch(
         workflowActions.fetchWorkflows(
-          filter.project ? filter.project.toLowerCase() : params.projectName || '*',
-          { ...filter, groupBy: GROUP_BY_WORKFLOW },
+          filters.project ? filters.project.toLowerCase() : params.projectName || '*',
+          { ...filters, groupBy: GROUP_BY_WORKFLOW },
           {
             ui: {
               controller: abortControllerRef.current,
@@ -238,7 +220,6 @@ export const useJobsPageData = (fetchAllJobRuns, fetchJobFunction, fetchJobs) =>
     abortControllerRef,
     abortJobRef,
     abortingJobs,
-    dateFilter,
     editableItem,
     getWorkflows,
     handleMonitoring,
@@ -251,7 +232,6 @@ export const useJobsPageData = (fetchAllJobRuns, fetchJobFunction, fetchJobs) =>
     refreshScheduled,
     requestErrorMessage,
     scheduledJobs,
-    selectedRunProject,
     setAbortingJobs,
     setEditableItem,
     setJobRuns,
@@ -259,7 +239,6 @@ export const useJobsPageData = (fetchAllJobRuns, fetchJobFunction, fetchJobs) =>
     setJobWizardMode,
     setJobs,
     setScheduledJobs,
-    setSelectedRunProject,
     terminateAbortTasksPolling
   }
 }

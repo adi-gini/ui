@@ -66,6 +66,8 @@ export const ERROR_STATE = 'error'
 export const FAIL_STATE = 'fail'
 export const FAILED_STATE = 'failed'
 
+export const VIEW_SEARCH_PARAMETER = 'view'
+
 /*=========== PAGES & TABS =============*/
 
 export const PROJECTS_PAGE = 'PROJECTS'
@@ -89,6 +91,9 @@ export const JOBS_MONITORING_PAGE = 'jobs-monitoring'
 export const JOBS_MONITORING_JOBS_TAB = 'jobs'
 export const JOBS_MONITORING_WORKFLOWS_TAB = 'workflows'
 export const JOBS_MONITORING_SCHEDULED_TAB = 'scheduled'
+
+export const ALERTS_PAGE = 'ALERTS'
+export const ALERTS_FILTERS = 'alerts'
 
 export const MODELS_PAGE = 'MODELS'
 export const MODELS_TAB = 'models'
@@ -122,9 +127,6 @@ export const CONSUMER_GROUP_PAGE = 'CONSUMER_GROUP'
 export const CONSUMER_GROUPS_PAGE = 'CONSUMER_GROUPS'
 export const CONSUMER_GROUPS_FILTER = 'CONSUMER_GROUPS_FILTER'
 export const CONSUMER_GROUP_FILTER = 'CONSUMER_GROUP_FILTER'
-
-/*=========== DATASETS =============*/
-export const DATASETS_FILTERS = 'DATASETS_FILTERS'
 
 /*=========== JOBS =============*/
 
@@ -175,6 +177,7 @@ export const RUN_NEW_JOB_BEGIN = 'RUN_NEW_JOB_BEGIN'
 export const RUN_NEW_JOB_FAILURE = 'RUN_NEW_JOB_FAILURE'
 export const RUN_NEW_JOB_SUCCESS = 'RUN_NEW_JOB_SUCCESS'
 export const SET_DELETING_PROJECTS = 'SET_DELETING_PROJECTS'
+export const SET_PROJECT_TOTAL_ALERTS = 'SET_PROJECT_TOTAL_ALERTS'
 export const SET_JOBS_DATA = 'SET_JOBS_DATA'
 export const SET_JOBS_MONITORING_DATA = 'SET_JOBS_MONITORING_DATA'
 export const SET_MLRUN_IS_UNHEALTHY = 'SET_MLRUN_IS_UNHEALTHY'
@@ -330,12 +333,7 @@ export const FUNCTION_FILTERS = 'FUNCTION_FILTERS'
 /*=========== ARTIFACTS =============*/
 
 export const ARTIFACTS_TAB = 'artifacts'
-export const FILES_FILTERS = 'FILES_FILTERS'
 export const ARTIFACT_PREVIEW_TABLE_ROW_LIMIT = 100
-
-/*=========== MODELS =============*/
-
-export const MODELS_FILTERS = 'MODELS_FILTERS'
 
 /*=========== FEATURE STORE =============*/
 
@@ -492,6 +490,7 @@ export const FETCH_ENDPOINT_METRICS_FAILURE = 'FETCH_ENDPOINT_METRICS_FAILURE'
 export const FETCH_ENDPOINT_METRICS_VALUES_BEGIN = 'FETCH_ENDPOINT_METRICS_VALUES_BEGIN'
 export const FETCH_ENDPOINT_METRICS_VALUES_SUCCESS = 'FETCH_ENDPOINT_METRICS_VALUES_SUCCESS'
 export const FETCH_ENDPOINT_METRICS_VALUES_FAILURE = 'FETCH_ENDPOINT_METRICS_VALUES_FAILURE'
+export const REMOVE_DETAILS_POPUP_INFO_CONTENT = 'REMOVE_DETAILS_POPUP_INFO_CONTENT'
 export const REMOVE_INFO_CONTENT = 'REMOVE_INFO_CONTENT'
 export const REMOVE_MODEL_FEATURE_VECTOR = 'REMOVE_MODEL_FEATURE_VECTOR'
 export const RESET_CHANGES = 'RESET_CHANGES'
@@ -499,6 +498,7 @@ export const SET_CHANGES = 'SET_CHANGES'
 export const SET_CHANGES_COUNTER = 'SET_CHANGES_COUNTER'
 export const SET_CHANGES_DATA = 'SET_CHANGES_DATA'
 export const SET_DETAILS_DATES = 'SET_DETAILS_DATES'
+export const SET_DETAILS_POPUP_INFO_CONTENT = 'SET_DETAILS_POPUP_INFO_CONTENT'
 export const SET_FILTERS_WAS_HANDLED = 'SET_FILTERS_WAS_HANDLED'
 export const SET_EDIT_MODE = 'SET_EDIT_MODE'
 export const SET_INFO_CONTENT = 'SET_INFO_CONTENT'
@@ -572,6 +572,16 @@ export const AUTO_REFRESH_ID = 'auto-refresh'
 export const AUTO_REFRESH = 'Auto Refresh'
 export const ANY_TIME = 'Any time'
 export const STATUS_FILTER_NAME = 'state'
+export const APPLICATION = 'application'
+export const ENDPOINT = 'endpoint'
+export const ENTITY_TYPE = 'entity-type'
+export const ENTITY_ID = 'entity-id'
+export const EVENT_TYPE = 'event-type'
+export const SEVERITY = 'severity'
+export const JOB = 'job'
+export const JOB_NAME = 'job-name'
+export const ENDPOINT_APPLICATION = 'endpoint-application'
+export const ENDPOINT_RESULT = 'endpoint-result'
 
 export const FILTER_MENU = 'filterMenu'
 export const FILTER_MENU_MODAL = 'filterMenuModal'
@@ -652,3 +662,6 @@ export const CHART_TYPE_BAR = 'bar'
 export const ARTIFACT_MAX_CHUNK_SIZE = 1048576 // 1MB
 export const ARTIFACT_MAX_PREVIEW_SIZE = 10485760 // 10MB
 export const ARTIFACT_MAX_DOWNLOAD_SIZE = 104857600 // 100MB
+
+/*=========== NOTIFICATION =============*/
+export const NOTIFICATION_DURATION = 500
