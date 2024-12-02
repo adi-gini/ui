@@ -206,6 +206,7 @@ const TabsSlider = ({
                   key={tab.id}
                   onClick={() => onSelectTab(tab)}
                 >
+                  {tab.icon && <div className="tabs-slider__tab-icon">{tab.icon}</div>}
                   {tab.label}
                   {tab.tip && <Tip className="tabs-slider__tab-tip" text={tab.tip} />}
                 </div>
