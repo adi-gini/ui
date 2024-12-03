@@ -19,6 +19,7 @@ such restriction.
 */
 import PropTypes from 'prop-types'
 
+import React from 'react'
 import ActionBar from '../ActionBar/ActionBar'
 import AlertsTableRow from '../../elements/AlertsTableRow/AlertsTableRow'
 import Breadcrumbs from '../../common/Breadcrumbs/Breadcrumbs'
@@ -26,11 +27,16 @@ import Loader from '../../common/Loader/Loader'
 import NoData from '../../common/NoData/NoData'
 import ProjectsAlertsFilters from './ProjectsAlertsFilters'
 import Table from '../Table/Table'
+import Pagination from '../../common/Pagination/Pagination'
 
 import { getNoDataMessage } from '../../utils/getNoDataMessage'
 import { ALERTS_FILTERS, ALERTS_PAGE, FUNCTION_FILTERS } from '../../constants'
 import { VIRTUALIZATION_CONFIG } from '../../types'
 import { isRowRendered } from '../../hooks/useVirtualization.hook'
+import { context } from '@cucumber/cucumber'
+
+// eslint-disable-next-line react-hooks/rules-of-hooks
+const { paginationConfigJobsRef } = React.useContext(context)
 
 const ProjectAlertsView = ({
   actionsMenu,
@@ -105,6 +111,7 @@ const ProjectAlertsView = ({
                 )}
               </Table>
             )}
+            <Pagination page={'ALERTS'} paginationConfig={paginationConfigJobsRef.current} />
           </div>
         </div>
       </div>
