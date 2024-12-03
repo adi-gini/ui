@@ -18,6 +18,7 @@ under the Apache 2.0 license is conditioned upon your compliance with
 such restriction.
 */
 import {
+  ALERTS_PAGE,
   APPLICATION,
   DATES_FILTER,
   ENDPOINT,
@@ -77,6 +78,16 @@ export const parseAlertsQueryParamsCallback = (paramName, paramValue) => {
   return paramValue
 }
 
+export const generatePageData = selectedAlert => {
+  return {
+    page: ALERTS_PAGE,
+    details: {
+      menu: [],
+      infoHeaders: alertsInfoHeaders
+    }
+  }
+}
+
 export const allProjectsOption = [
   {
     id: FILTER_ALL_ITEMS,
@@ -113,4 +124,16 @@ export const filterAlertsEventTypeOptions = [
   { label: 'MM App Ano. Suspected', id: 'mm app anomaly suspected' },
   { label: 'MM App Failed', id: 'mm app failed' },
   { label: 'MM App Failed', id: 'failed' }
+]
+
+export const alertsInfoHeaders = [
+  { label: 'Project Name', id: 'project_name' },
+  { label: 'Endpoint Name:', id: 'endpoint_name' },
+  { label: 'Entity ID', id: 'entity_id' },
+  { label: 'Type', id: 'type' },
+  { label: 'Timestamp', id: 'timestamp' },
+  { label: 'Severity', id: 'severity' },
+  { label: 'Trigger criteria count', id: 'trigger_criteria_count' },
+  { label: 'Timestamp key', id: 'timestamp_key' },
+  { label: 'Trigger criteria time_period', id: 'trigger_criteria_time_period' }
 ]

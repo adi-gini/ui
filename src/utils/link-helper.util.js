@@ -31,8 +31,7 @@ export const isProjectValid = (navigate, projects, currentProjectName) => {
   if (
     projects.length > 0 &&
     currentProjectName &&
-    !projects
-      .some(project => project?.metadata?.name === currentProjectName)
+    !projects.some(project => project?.metadata?.name === currentProjectName)
   ) {
     navigate('/projects', { replace: true })
   }
@@ -43,10 +42,21 @@ export const generateUrlFromRouterPath = link => {
 }
 
 export const getCloseDetailsLink = (location, paramName) => {
-  return location.pathname
-    .split('/')
-    .splice(0, location.pathname.split('/').lastIndexOf(paramName) + 1)
-    .join('/') + window.location.search
+  return (
+    location.pathname
+      .split('/')
+      .splice(0, location.pathname.split('/').lastIndexOf(paramName) + 1)
+      .join('/') + window.location.search
+  )
+}
+
+export const getCloseDetailsAlertLink = (location, paramName) => {
+  return (
+    location.pathname
+      .split('/')
+      .splice(0, location.pathname.split('/').lastIndexOf(paramName))
+      .join('/') + window.location.search
+  )
 }
 
 export const generateLinkToDetailsPanel = (

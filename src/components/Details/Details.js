@@ -89,7 +89,8 @@ const Details = ({
   setIteration,
   setIterationOption,
   showWarning,
-  tab = ''
+  tab = '',
+  withActionMenu
 }) => {
   const applyChangesRef = useRef()
   const dispatch = useDispatch()
@@ -285,6 +286,7 @@ const Details = ({
               selectedItem={selectedItem}
               setIteration={setIteration}
               tab={tab}
+              withActionMenu={withActionMenu}
             />
             <TabsSlider
               initialTab={isDetailsPopUp ? detailsPopUpSelectedTab : params.tab}

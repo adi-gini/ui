@@ -28,6 +28,7 @@ import ProjectsAlertsFilters from './ProjectsAlertsFilters'
 import Table from '../Table/Table'
 
 import { getNoDataMessage } from '../../utils/getNoDataMessage'
+import { getCloseDetailsAlertLink } from '../../utils/link-helper.util'
 import { ALERTS_FILTERS, ALERTS_PAGE, FUNCTION_FILTERS } from '../../constants'
 import { VIRTUALIZATION_CONFIG } from '../../types'
 import { isRowRendered } from '../../hooks/useVirtualization.hook'
@@ -37,7 +38,9 @@ const ProjectAlertsView = ({
   alertsFiltersConfig,
   alertsStore,
   filters,
+  handleCancel,
   pageData,
+  params,
   refreshAlertsCallback,
   requestErrorMessage,
   selectedAlert,
@@ -82,12 +85,17 @@ const ProjectAlertsView = ({
             ) : (
               <Table
                 actionsMenu={actionsMenu}
+                getCloseDetailsLink={() =>
+                  getCloseDetailsAlertLink(window.location, params.alertName)
+                }
                 pageData={pageData}
                 retryRequest={refreshAlertsCallback}
                 selectedItem={selectedAlert}
                 tableClassName="alerts-table"
+                handleCancel={handleCancel}
                 hideActionsMenu
                 tableHeaders={tableContent[0]?.content ?? []}
+                withActionMenu={false}
               >
                 {tableContent.map(
                   (tableItem, index) =>
@@ -115,6 +123,7 @@ const ProjectAlertsView = ({
 ProjectAlertsView.propTypes = {
   alertsFiltersConfig: PropTypes.object.isRequired,
   filters: PropTypes.object.isRequired,
+  handleCancel: PropTypes.func.isRequired,
   refreshAlertsCallback: PropTypes.func.isRequired,
   requestErrorMessage: PropTypes.string.isRequired,
   tableContent: PropTypes.arrayOf(PropTypes.object).isRequired,

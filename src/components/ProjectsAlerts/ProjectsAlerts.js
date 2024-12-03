@@ -17,12 +17,13 @@ illegal under applicable law, and the grant of the foregoing license
 under the Apache 2.0 license is conditioned upon your compliance with
 such restriction.
 */
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import ProjectAlertsView from './ProjectsAlertsView'
 
 import { getAlertsFiltersConfig, parseAlertsQueryParamsCallback } from './alerts.util'
+import { generatePageData } from './alerts.util'
 import { useFiltersFromSearchParams } from '../../hooks/useFiltersFromSearchParams.hook'
 
 import { useParams } from 'react-router-dom'
@@ -36,7 +37,7 @@ import cssVariables from './alerts.scss'
 const ProjectsAlerts = () => {
   const [alerts, setAlerts] = useState([])
   const [requestErrorMessage, setRequestErrorMessage] = useState('')
-  const [selectedAlert] = useState({})
+  const [selectedAlert, setSelectedAlert] = useState({})
   const [selectedRowData] = useState({})
   const params = useParams()
   const dispatch = useDispatch()
@@ -50,6 +51,8 @@ const ProjectsAlerts = () => {
     alertsFiltersConfig,
     parseAlertsQueryParamsCallback
   )
+
+  const pageData = useMemo(() => generatePageData(selectedAlert), [selectedAlert])
 
   const fetchData = useCallback(
     filters => {
@@ -80,6 +83,11 @@ const ProjectsAlerts = () => {
     return alerts.map(alert => createAlertRowData(alert))
   }, [alerts])
 
+  useEffect(() => {
+    if (tableContent.length === 0) return
+    setSelectedAlert(tableContent[0].data.ui)
+  }, [alerts])
+
   const refreshAlertsCallback = useCallback(
     filters => {
       setAlerts([])
@@ -92,6 +100,10 @@ const ProjectsAlerts = () => {
     fetchData,
     filters: alertsFilters
   })
+
+  const handleCancel = () => {
+    setSelectedAlert({})
+  }
 
   const virtualizationConfig = useVirtualization({
     rowsData: {
@@ -114,7 +126,9 @@ const ProjectsAlerts = () => {
       alertsStore={alertsStore}
       actionsMenu={() => []} // TODO
       filters={alertsFilters}
-      pageData={{}} //TODO
+      handleCancel={handleCancel}
+      pageData={pageData}
+      params={params}
       refreshAlertsCallback={refreshAlertsCallback}
       requestErrorMessage={requestErrorMessage}
       selectedAlert={selectedAlert}
