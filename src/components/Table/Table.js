@@ -40,6 +40,7 @@ const Table = React.forwardRef(
       getCloseDetailsLink = null,
       handleCancel = () => {},
       hideActionsMenu = false,
+      isDetailsScreenLarge = false,
       mainRowItemsCount = 1,
       pageData,
       retryRequest = () => {},
@@ -52,7 +53,8 @@ const Table = React.forwardRef(
         tableBodyPaddingTop: 0,
         startIndex: -1,
         endIndex: -1
-      }
+      },
+      withActionMenu
     },
     ref
   ) => {
@@ -123,6 +125,7 @@ const Table = React.forwardRef(
         handleCancel={handleCancel}
         hideActionsMenu={hideActionsMenu}
         isTablePanelOpen={tableStore.isTablePanelOpen}
+        isDetailsScreenLarge={isDetailsScreenLarge}
         mainRowItemsCount={mainRowItemsCount}
         pageData={pageData}
         params={params}
@@ -138,6 +141,7 @@ const Table = React.forwardRef(
         tableHeadRef={tableHeadRef}
         tablePanelRef={tablePanelRef}
         virtualizationConfig={virtualizationConfig}
+        withActionMenu={withActionMenu}
       >
         {children}
       </TableView>
@@ -153,6 +157,7 @@ Table.propTypes = {
   getCloseDetailsLink: PropTypes.func,
   handleCancel: PropTypes.func,
   hideActionsMenu: PropTypes.bool,
+  isDetailsScreenLarge: PropTypes.bool,
   mainRowItemsCount: PropTypes.number,
   pageData: PropTypes.shape({}).isRequired,
   retryRequest: PropTypes.func,
@@ -161,7 +166,8 @@ Table.propTypes = {
   tab: PropTypes.string,
   tableClassName: PropTypes.string,
   tableHeaders: PropTypes.array,
-  virtualizationConfig: VIRTUALIZATION_CONFIG
+  virtualizationConfig: VIRTUALIZATION_CONFIG,
+  withActionMenu: PropTypes.bool
 }
 
 export default Table

@@ -17,11 +17,12 @@ illegal under applicable law, and the grant of the foregoing license
 under the Apache 2.0 license is conditioned upon your compliance with
 such restriction.
 */
-import React from 'react'
+import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 
+import DetailsAlert from '../../DetailsAlert/DetailsAlert'
 import DetailsAlerts from '../../DetailsAlerts/DetailsAlerts'
 import DetailsAnalysis from '../../DetailsAnalysis/DetailsAnalysis'
 import DetailsArtifacts from '../../DetailsArtifacts/DetailsArtifacts'
@@ -44,6 +45,7 @@ import NoData from '../../../common/NoData/NoData'
 import { isJobKindDask, JOB_STEADY_STATES } from '../../Jobs/jobs.util'
 
 import {
+  DETAILS_ALERT_APPLICATION,
   DETAILS_ALERTS_TAB,
   DETAILS_ANALYSIS_TAB,
   DETAILS_ARTIFACTS_TAB,
@@ -82,8 +84,14 @@ const DetailsTabsContent = ({
 }) => {
   const detailsStore = useSelector(store => store.detailsStore)
   const params = useParams()
+  const location = useLocation()
 
-  switch (isDetailsPopUp ? detailsPopUpSelectedTab : params.tab) {
+  const matchedAlertsPath = useMemo(() => {
+    const alertsPath = ['application', 'endpoint', 'job']
+    return alertsPath.find(segment => location.pathname.includes(segment)) || null
+  }, [location.pathname])
+
+  switch (isDetailsPopUp ? detailsPopUpSelectedTab : params.tab || matchedAlertsPath) {
     case DETAILS_OVERVIEW_TAB:
       return (
         <DetailsInfo
@@ -124,12 +132,7 @@ const DetailsTabsContent = ({
     case DETAILS_PREVIEW_TAB:
       return <DetailsPreview artifact={selectedItem} handlePreview={handlePreview} />
     case DETAILS_INPUTS_TAB:
-      return (
-        <DetailsInputs
-          inputs={selectedItem.inputs}
-          isDetailsPopUp={isDetailsPopUp}
-        />
-      )
+      return <DetailsInputs inputs={selectedItem.inputs} isDetailsPopUp={isDetailsPopUp} />
     case DETAILS_ARTIFACTS_TAB:
       return (
         <DetailsArtifacts
@@ -180,12 +183,12 @@ const DetailsTabsContent = ({
     case DETAILS_METADATA_TAB:
     case DETAILS_FEATURES_TAB:
     case DETAILS_RETURNED_FEATURES_TAB:
-      return (detailsStore.modelFeatureVectorData.features ??
+      return detailsStore.modelFeatureVectorData.features ??
         (selectedItem.schema ||
           selectedItem.entities ||
           selectedItem.features ||
           selectedItem.inputs ||
-          selectedItem.outputs)) ? (
+          selectedItem.outputs) ? (
         <DetailsMetadata
           selectedItem={
             selectedItem.schema ||
@@ -235,6 +238,8 @@ const DetailsTabsContent = ({
           setChangesCounter={setChangesCounter}
         />
       )
+    case DETAILS_ALERT_APPLICATION:
+      return <DetailsAlert pageData={pageData} selectedItem={selectedItem} />
     default:
       return null
   }
