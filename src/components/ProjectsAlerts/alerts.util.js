@@ -83,8 +83,12 @@ export const generatePageData = selectedAlert => {
     page: ALERTS_PAGE,
     details: {
       menu: [],
-      infoHeaders: alertsInfoHeaders
-    }
+      infoHeaders: {
+        alertsGeneralHeaders,
+        alertsTriggerCriteriaHeaders
+      }
+    },
+    selectedAlert
   }
 }
 
@@ -126,14 +130,16 @@ export const filterAlertsEventTypeOptions = [
   { label: 'MM App Failed', id: 'failed' }
 ]
 
-export const alertsInfoHeaders = [
+export const alertsGeneralHeaders = [
   { label: 'Project Name', id: 'project_name' },
   { label: 'Endpoint Name:', id: 'endpoint_name' },
   { label: 'Entity ID', id: 'entity_id' },
   { label: 'Type', id: 'type' },
   { label: 'Timestamp', id: 'timestamp' },
-  { label: 'Severity', id: 'severity' },
+  { label: 'Severity', id: 'severity' }
+]
+
+export const alertsTriggerCriteriaHeaders = [
   { label: 'Trigger criteria count', id: 'trigger_criteria_count' },
-  { label: 'Timestamp key', id: 'timestamp_key' },
   { label: 'Trigger criteria time_period', id: 'trigger_criteria_time_period' }
 ]

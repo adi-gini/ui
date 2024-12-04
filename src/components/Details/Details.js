@@ -72,6 +72,7 @@ const Details = ({
   handleRefresh = () => {},
   isDetailsPopUp = false,
   isDetailsScreen = false,
+  isDetailsScreenLarge = false,
   pageData,
   removeDetailsPopUpInfoContent,
   removeInfoContent,
@@ -90,7 +91,7 @@ const Details = ({
   setIterationOption,
   showWarning,
   tab = '',
-  withActionMenu
+  withActionMenu = true
 }) => {
   const applyChangesRef = useRef()
   const dispatch = useDispatch()
@@ -114,7 +115,8 @@ const Details = ({
     'table__item',
     detailsStore.showWarning && 'pop-up-dialog-opened',
     isDetailsScreen && 'table__item_big',
-    isDetailsPopUp && 'table__item-popup'
+    isDetailsPopUp && 'table__item-popup',
+    isDetailsScreenLarge && 'table__item_large'
   )
 
   const formRef = React.useRef(
@@ -288,13 +290,15 @@ const Details = ({
               tab={tab}
               withActionMenu={withActionMenu}
             />
-            <TabsSlider
-              initialTab={isDetailsPopUp ? detailsPopUpSelectedTab : params.tab}
-              isDetailsPopUp={isDetailsPopUp}
-              onClick={newTab => setDetailsPopUpSelectedTab && setDetailsPopUpSelectedTab(newTab)}
-              skipLink={isDetailsPopUp}
-              tabsList={detailsMenu}
-            />
+            {withActionMenu && (
+              <TabsSlider
+                initialTab={isDetailsPopUp ? detailsPopUpSelectedTab : params.tab}
+                isDetailsPopUp={isDetailsPopUp}
+                onClick={newTab => setDetailsPopUpSelectedTab && setDetailsPopUpSelectedTab(newTab)}
+                skipLink={isDetailsPopUp}
+                tabsList={detailsMenu}
+              />
+            )}
           </div>
           <div className="item-info">
             <DetailsTabsContent

@@ -85,8 +85,14 @@ const ProjectsAlerts = () => {
 
   useEffect(() => {
     if (tableContent.length === 0) return
-    setSelectedAlert(tableContent[0].data.ui)
-  }, [alerts])
+
+    const alert = tableContent.find(({ data }) => data.ui.name === params.alertName)
+    if (alert) {
+      setSelectedAlert({ ...alert, ...{ name: alert.data.name } })
+    } else {
+      return setSelectedAlert({})
+    }
+  }, [params, tableContent])
 
   const refreshAlertsCallback = useCallback(
     filters => {

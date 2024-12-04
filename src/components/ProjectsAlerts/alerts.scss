@@ -3,7 +3,7 @@
 
 $alertsRowHeight: $rowHeight;
 $alertsHeaderRowHeight: $headerRowHeight;
-$alertsRowHeightExtended: $rowHeightExtended;
+$alertsRowHeightExtended: $rowHeight;
 
 .alerts-table {
   @include rowsHeight($alertsHeaderRowHeight, $alertsRowHeight, $alertsRowHeightExtended);

@@ -40,6 +40,7 @@ const Table = React.forwardRef(
       getCloseDetailsLink = null,
       handleCancel = () => {},
       hideActionsMenu = false,
+      isDetailsScreenLarge = false,
       mainRowItemsCount = 1,
       pageData,
       retryRequest = () => {},
@@ -124,6 +125,7 @@ const Table = React.forwardRef(
         handleCancel={handleCancel}
         hideActionsMenu={hideActionsMenu}
         isTablePanelOpen={tableStore.isTablePanelOpen}
+        isDetailsScreenLarge={isDetailsScreenLarge}
         mainRowItemsCount={mainRowItemsCount}
         pageData={pageData}
         params={params}
@@ -155,6 +157,7 @@ Table.propTypes = {
   getCloseDetailsLink: PropTypes.func,
   handleCancel: PropTypes.func,
   hideActionsMenu: PropTypes.bool,
+  isDetailsScreenLarge: PropTypes.bool,
   mainRowItemsCount: PropTypes.number,
   pageData: PropTypes.shape({}).isRequired,
   retryRequest: PropTypes.func,

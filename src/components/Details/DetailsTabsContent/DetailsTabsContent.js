@@ -17,10 +17,10 @@ illegal under applicable law, and the grant of the foregoing license
 under the Apache 2.0 license is conditioned upon your compliance with
 such restriction.
 */
-import React from 'react'
+import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 
 import DetailsAlert from '../../DetailsAlert/DetailsAlert'
 import DetailsAlerts from '../../DetailsAlerts/DetailsAlerts'
@@ -45,7 +45,7 @@ import NoData from '../../../common/NoData/NoData'
 import { isJobKindDask, JOB_STEADY_STATES } from '../../Jobs/jobs.util'
 
 import {
-  DETAILS_ALERT,
+  DETAILS_ALERT_APPLICATION,
   DETAILS_ALERTS_TAB,
   DETAILS_ANALYSIS_TAB,
   DETAILS_ARTIFACTS_TAB,
@@ -84,8 +84,14 @@ const DetailsTabsContent = ({
 }) => {
   const detailsStore = useSelector(store => store.detailsStore)
   const params = useParams()
+  const location = useLocation()
 
-  switch (isDetailsPopUp ? detailsPopUpSelectedTab : params.tab) {
+  const matchedAlertsPath = useMemo(() => {
+    const alertsPath = ['application', 'endpoint', 'job']
+    return alertsPath.find(segment => location.pathname.includes(segment)) || null
+  }, [location.pathname])
+
+  switch (isDetailsPopUp ? detailsPopUpSelectedTab : params.tab || matchedAlertsPath) {
     case DETAILS_OVERVIEW_TAB:
       return (
         <DetailsInfo
@@ -232,8 +238,8 @@ const DetailsTabsContent = ({
           setChangesCounter={setChangesCounter}
         />
       )
-    case DETAILS_ALERT:
-      return <DetailsAlert />
+    case DETAILS_ALERT_APPLICATION:
+      return <DetailsAlert pageData={pageData} selectedItem={selectedItem} />
     default:
       return null
   }

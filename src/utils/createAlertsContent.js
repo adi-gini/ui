@@ -139,8 +139,9 @@ const getNotificationData = notifications =>
     }
   })
 
-export const createAlertRowData = ({ name, ...alert }) => {
-  alert.id = alert.id.slice(-6)
+export const createAlertRowData = alert => {
+  const { name } = alert
+  const id = alert.id.slice(-6)
 
   return {
     data: {
@@ -148,39 +149,42 @@ export const createAlertRowData = ({ name, ...alert }) => {
     },
     content: [
       {
-        id: `alertName.${alert.id}`,
+        id: `alertName.${id}`,
         headerId: 'alertName',
         headerLabel: 'Alert Name',
         value: name,
         className: 'table-cell-1',
-        getLink: () => {}, //TODO: Implement in ML-8368
+        // getLink: () => {}, //TODO: Implement in ML-8368
+        getLink: (tag, tab, hash) => {
+          return `/projects/*/alerts/${name}/application${window.location.search}`
+        },
         showStatus: true,
         tooltip: name,
         type: 'link'
       },
       {
-        id: `projectName.${alert.id}`,
+        id: `projectName.${id}`,
         headerId: 'projectName',
         headerLabel: 'Project name',
         value: alert.project,
         className: 'table-cell-1'
       },
       {
-        id: `eventType.${alert.id}`,
+        id: `eventType.${id}`,
         headerId: 'eventType',
         headerLabel: 'Event Type',
         value: alert.event_kind.split('-').join(' '),
         className: 'table-cell-1'
       },
       {
-        id: `entityId.${alert.id}`,
+        id: `entityId.${id}`,
         headerId: 'entityId',
         headerLabel: 'Entity ID',
         value: alert.entity_id,
         className: 'table-cell-1'
       },
       {
-        id: `entityType.${alert.id}`,
+        id: `entityType.${id}`,
         headerId: 'entityType',
         headerLabel: 'Entity Type',
         value: getEntityTypeData(alert.entity_kind).value,
@@ -188,14 +192,14 @@ export const createAlertRowData = ({ name, ...alert }) => {
         tooltip: getEntityTypeData(alert.entity_kind).tooltip
       },
       {
-        id: `timestamp.${alert.id}`,
+        id: `timestamp.${id}`,
         headerId: 'timestamp',
         headerLabel: 'Timestamp',
         value: formatDatetime(alert.activation_time, '-'),
         className: 'table-cell-1'
       },
       {
-        id: `severity.${alert.id}`,
+        id: `severity.${id}`,
         headerId: SEVERITY,
         headerLabel: upperFirst(SEVERITY),
         value: getSeverityData(alert.severity).value,
@@ -203,21 +207,21 @@ export const createAlertRowData = ({ name, ...alert }) => {
         className: 'table-cell-1'
       },
       {
-        id: `criteriaCount.${alert.id}`,
+        id: `criteriaCount.${id}`,
         headerId: 'criteriaCount',
         headerLabel: 'Trigger criteria count',
         value: alert.criteria.count,
         className: 'table-cell-1'
       },
       {
-        id: `criteriaTime.${alert.id}`,
+        id: `criteriaTime.${id}`,
         headerId: 'criteriaTime',
         headerLabel: 'Trigger criteria time period',
         value: alert.criteria.period,
         className: 'table-cell-1'
       },
       {
-        id: `notifications.${alert.id}`,
+        id: `notifications.${id}`,
         headerId: 'notifications',
         headerLabel: 'Notifications',
         value: getNotificationData(alert.notifications),

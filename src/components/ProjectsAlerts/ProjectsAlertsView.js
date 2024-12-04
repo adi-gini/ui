@@ -88,6 +88,7 @@ const ProjectAlertsView = ({
                 getCloseDetailsLink={() =>
                   getCloseDetailsAlertLink(window.location, params.alertName)
                 }
+                isDetailsScreenLarge={true}
                 pageData={pageData}
                 retryRequest={refreshAlertsCallback}
                 selectedItem={selectedAlert}

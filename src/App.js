@@ -156,7 +156,7 @@ const App = () => {
           {/*TODO: the Alerts Route will be updated with ML-8368 */}
           {/*<Route path="projects/:id/alerts" element={<ProjectsAlerts />} />*/}
 
-          {['projects/*/alerts', 'projects/*/alerts/:alertName'].map((path, index) => (
+          {['projects/*/alerts', 'projects/*/alerts/:alertName/application'].map((path, index) => (
             <Fragment key={index}>
               <Route path={path} element={<ProjectsAlerts />} />
             </Fragment>
