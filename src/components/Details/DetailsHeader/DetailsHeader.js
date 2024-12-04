@@ -62,7 +62,8 @@ const DetailsHeader = ({
   pageData,
   selectedItem,
   setIteration,
-  tab
+  tab,
+  withActionMenu = true
 }) => {
   const [headerIsMultiline, setHeaderIsMultiline] = useState(false)
   const detailsStore = useSelector(store => store.detailsStore)
@@ -281,7 +282,7 @@ const DetailsHeader = ({
             <Refresh />
           </RoundedIcon>
         )}
-        <ActionsMenu dataItem={selectedItem} menu={actionsMenu} time={500} />
+        {withActionMenu && <ActionsMenu dataItem={selectedItem} menu={actionsMenu} time={500} />}
         <div className="item-header__navigation-buttons">
           {withToggleViewBtn && !isDetailsPopUp && (
             <>

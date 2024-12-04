@@ -39,6 +39,7 @@ const TableView = ({
   handleCancel,
   hideActionsMenu,
   isTablePanelOpen,
+  isDetailsScreenLarge = false,
   mainRowItemsCount,
   pageData,
   retryRequest,
@@ -53,7 +54,8 @@ const TableView = ({
   tablePanelRef,
   tableRef,
   toggleConvertedYaml,
-  virtualizationConfig
+  virtualizationConfig,
+  withActionMenu
 }) => {
   const tableClass = classnames(
     'table',
@@ -106,10 +108,12 @@ const TableView = ({
             detailsMenu={pageData.details.menu}
             formInitialValues={detailsFormInitialValues}
             handleCancel={handleCancel}
+            isDetailsScreenLarge={isDetailsScreenLarge}
             pageData={pageData}
             retryRequest={retryRequest}
             selectedItem={selectedItem}
             tab={tab}
+            withActionMenu={withActionMenu}
           />
         )}
       </div>
@@ -125,6 +129,7 @@ TableView.propTypes = {
   getCloseDetailsLink: PropTypes.func,
   handleCancel: PropTypes.func.isRequired,
   hideActionsMenu: PropTypes.bool.isRequired,
+  isDetailsScreenLarge: PropTypes.bool,
   isTablePanelOpen: PropTypes.bool.isRequired,
   pageData: PropTypes.shape({}).isRequired,
   retryRequest: PropTypes.func.isRequired,
