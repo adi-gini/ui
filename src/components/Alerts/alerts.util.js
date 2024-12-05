@@ -111,6 +111,5 @@ export const filterAlertsEventTypeOptions = [
   { label: 'S Perf. Suspected', id: 'system performance suspected' },
   { label: 'MM App Ano. Detected', id: 'mm app anomaly detected' },
   { label: 'MM App Ano. Suspected', id: 'mm app anomaly suspected' },
-  { label: 'MM App Failed', id: 'mm app failed' },
-  { label: 'MM App Failed', id: 'failed' }
+  { label: 'MM App Failed', id: 'mm app failed' }
 ]
