@@ -28,6 +28,10 @@ import {
   DATE_RANGE_TIME_FILTER,
   ENTITIES_FILTER,
   ENTITY_TYPE,
+  ENTITY_ID,
+  EVENT_TYPE,
+  ENDPOINT_APPLICATION,
+  ENDPOINT_RESULT,
   FEATURE_SETS_TAB,
   FEATURE_VECTORS_TAB,
   FEATURES_TAB,
@@ -37,12 +41,14 @@ import {
   GROUP_BY_NONE,
   ITERATIONS_FILTER,
   JOBS_PAGE,
+  JOB_NAME,
   LABELS_FILTER,
   MODEL_ENDPOINTS_TAB,
   MODELS_TAB,
   MONITOR_WORKFLOWS_TAB,
   NAME_FILTER,
   REAL_TIME_PIPELINES_TAB,
+  SEVERITY,
   SHOW_ITERATIONS,
   SHOW_UNTAGGED_FILTER,
   FILTER_ALL_ITEMS,
@@ -52,17 +58,11 @@ import {
   DATES_FILTER,
   PROJECT_FILTER,
   PROJECTS_FILTER,
+  SCHEDULE_TAB,
   TYPE_FILTER,
   CONSUMER_GROUP_PAGE,
   CONSUMER_GROUPS_PAGE,
-  MONITOR_JOBS_TAB,
-  SCHEDULE_TAB,
-  ENTITY_ID,
-  JOB_NAME,
-  SEVERITY,
-  EVENT_TYPE,
-  ENDPOINT_APPLICATION,
-  ENDPOINT_RESULT
+  MONITOR_JOBS_TAB
 } from '../constants'
 
 const messageNamesList = {
@@ -194,17 +194,17 @@ const getVisibleFilterTypes = (filtersConfig, filters, filtersStore) => {
     const isSeverityVisible =
       type === SEVERITY && filters[SEVERITY]?.length > 0 && filters[SEVERITY][0] !== 'all'
     const isInputVisible =
-      (type === NAME_FILTER ||
+      (type === ENTITY_TYPE ||
+        type === ENTITY_ID ||
+        type === ENDPOINT_APPLICATION ||
+        type === ENDPOINT_RESULT ||
+        type === EVENT_TYPE ||
+        type === NAME_FILTER ||
         type === LABELS_FILTER ||
         type === ENTITIES_FILTER ||
         type === PROJECT_FILTER ||
         type === PROJECTS_FILTER ||
-        type === ENTITY_TYPE ||
-        type === ENTITY_ID ||
-        type === JOB_NAME ||
-        type === ENDPOINT_APPLICATION ||
-        type === ENDPOINT_RESULT ||
-        type === EVENT_TYPE) &&
+        type === JOB_NAME) &&
       filters[type]?.length > 0 &&
       filters[type] !== 'all'
     const isStatusVisible =
