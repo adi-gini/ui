@@ -128,10 +128,6 @@ export const getNoDataMessage = (
   tab,
   filtersStore
 ) => {
-  console.log({ filters })
-  console.log({ filtersConfig })
-  console.log({ filtersStore })
-
   if (defaultMessage) return defaultMessage
 
   if (Array.isArray(filtersConfig)) {
@@ -197,8 +193,6 @@ const getVisibleFilterTypes = (filtersConfig, filters, filtersStore) => {
       type === ITERATIONS_FILTER && filters[ITERATIONS_FILTER] === SHOW_ITERATIONS
     const isSeverityVisible =
       type === SEVERITY && filters[SEVERITY]?.length > 0 && filters[SEVERITY][0] !== 'all'
-    console.log(filters[SEVERITY][0] !== 'all')
-
     const isInputVisible =
       (type === NAME_FILTER ||
         type === LABELS_FILTER ||

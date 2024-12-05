@@ -24,24 +24,25 @@ import AlertsTableRow from '../../elements/AlertsTableRow/AlertsTableRow'
 import Breadcrumbs from '../../common/Breadcrumbs/Breadcrumbs'
 import Loader from '../../common/Loader/Loader'
 import NoData from '../../common/NoData/NoData'
-import ProjectsAlertsFilters from './ProjectsAlertsFilters'
+import AlertsFilters from './AlertsFilters'
 import Table from '../Table/Table'
 
 import { getNoDataMessage } from '../../utils/getNoDataMessage'
 import { ALERTS_FILTERS, ALERTS_PAGE } from '../../constants'
 import { VIRTUALIZATION_CONFIG } from '../../types'
 import { isRowRendered } from '../../hooks/useVirtualization.hook'
-import filtersStore from '../../reducers/filtersReducer'
 
-const ProjectAlertsView = ({
+const AlertsView = ({
   actionsMenu,
   alertsFiltersConfig,
   alertsStore,
   filters,
+  filtersStore,
   pageData,
   refreshAlertsCallback,
   requestErrorMessage,
   selectedAlert,
+  setSearchParams,
   tableContent,
   virtualizationConfig
 }) => {
@@ -61,10 +62,11 @@ const ProjectAlertsView = ({
                 filters={filters}
                 handleRefresh={refreshAlertsCallback}
                 page={ALERTS_PAGE}
+                setSearchParams={setSearchParams}
                 withRefreshButton
                 withoutExpandButton
               >
-                <ProjectsAlertsFilters />
+                <AlertsFilters />
               </ActionBar>
             </div>
             {alertsStore.loading ? (
@@ -113,12 +115,14 @@ const ProjectAlertsView = ({
   )
 }
 
-ProjectAlertsView.propTypes = {
+AlertsView.propTypes = {
   alertsFiltersConfig: PropTypes.object.isRequired,
   filters: PropTypes.object.isRequired,
+  filtersStore: PropTypes.object.isRequired,
   refreshAlertsCallback: PropTypes.func.isRequired,
   requestErrorMessage: PropTypes.string.isRequired,
+  setSearchParams: PropTypes.func.isRequired,
   tableContent: PropTypes.arrayOf(PropTypes.object).isRequired,
   virtualizationConfig: VIRTUALIZATION_CONFIG.isRequired
 }
-export default ProjectAlertsView
+export default AlertsView
