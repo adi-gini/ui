@@ -3,26 +3,78 @@
 
 .stats {
   &-card {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
-    position: relative;
+    padding: 20px 25px 15px;
     color: $topaz;
     background-color: $white;
     border-radius: 8px;
     box-shadow: $previewBoxShadowInit;
-    padding: 20px 25px 15px;
     transition: box-shadow 0.3s ease-in-out;
 
     &__row {
       display: flex;
-      flex-flow: row nowrap;
       flex: 1 0 100%;
-      justify-content: space-between;
+      flex-flow: row nowrap;
       align-items: center;
+      justify-content: space-between;
 
       &:not(:last-child) {
-        margin-bottom: 1em;
         min-height: 40px;
+        margin-bottom: 1em;
+      }
+
+      .info {
+        display: flex;
+        align-items: center;
+        color: $topaz;
+        font-size: 0.75rem;
+
+        & > *:first-child {
+          flex: 0 0 auto;
+          margin-right: 5px;
+          color: $spunPearl;
+        }
+
+        &-icon {
+          flex: 0 1 25px;
+
+          & * {
+            fill: $spunPearl;
+          }
+        }
+      }
+
+      .header {
+        &-title {
+          display: flex;
+          align-items: stretch;
+          margin-bottom: 5px;
+          color: $primary;
+          font-weight: normal;
+          font-size: 1.25rem;
+
+          :not(:first-child) {
+            flex: 1 0 auto;
+          }
+        }
+
+        & > *:first-child {
+          flex: 0 0 auto;
+          margin-right: 5px;
+          color: $spunPearl;
+        }
+
+        &-icon {
+          width: 20px;
+          height: 20px;
+          margin-right: 5px;
+
+          path {
+            fill: $ceriseRed;
+          }
+        }
       }
     }
 
@@ -37,10 +89,10 @@
     }
 
     &__title {
+      margin: 0;
       color: $primary;
       font-weight: normal;
       font-size: 1.25rem;
-      margin: 0;
     }
   }
 }
