@@ -39,7 +39,10 @@ import { formatDatetime } from '../../../utils'
 import { TERTIARY_BUTTON } from 'igz-controls/constants'
 import { ACTIONS_MENU } from '../../../types'
 import { getViewMode } from '../../../utils/helper'
-import { generateUrlFromRouterPath, getDefaultCloseDetailsLink } from '../../../utils/link-helper.util'
+import {
+  generateUrlFromRouterPath,
+  getDefaultCloseDetailsLink
+} from '../../../utils/link-helper.util'
 import { getFilteredSearchParams } from '../../../utils/filter.util'
 
 import { ReactComponent as Close } from 'igz-controls/images/close.svg'
@@ -149,21 +152,9 @@ const DetailsHeader = ({
             </Link>
           )}
           <Tooltip
-            template={
-              <TextTooltipTemplate
-                text={
-                  selectedItem.name ||
-                  selectedItem.db_key ||
-                  selectedItem.spec?.model?.replace(/:.*$/, '')
-                }
-              />
-            }
+            template={<TextTooltipTemplate text={selectedItem.name || selectedItem.db_key} />}
           >
-            {
-              selectedItem.name ||
-                selectedItem.db_key ||
-                selectedItem.spec?.model?.replace(/:.*$/, '') // 'model-key:model-tag', remove tag
-            }
+            {selectedItem.name || selectedItem.db_key}
           </Tooltip>
         </h3>
         <div className="item-header__status">
@@ -180,11 +171,7 @@ const DetailsHeader = ({
                   )
                 : selectedItem?.updated
                   ? formatDatetime(selectedItem?.updated, 'N/A')
-                  : selectedItem?.spec?.model.includes(':') // 'model-key:model-tag'
-                    ? selectedItem.spec.model.replace(/^.*:/, '') // remove key
-                    : selectedItem?.spec?.model
-                      ? selectedItem?.metadata?.uid
-                      : ''}
+                  : pageData.details.additionalHeaderInfo || ''}
             </span>
             {stateValue && stateLabel && (
               <Tooltip className="state" template={<TextTooltipTemplate text={stateLabel} />}>
