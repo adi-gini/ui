@@ -69,6 +69,7 @@ const TableCell = ({
       className
     })
   } else if (link && data.type !== 'hidden') {
+    console.log(link, data.type)
     return (
       <TableLinkCell
         className={className}

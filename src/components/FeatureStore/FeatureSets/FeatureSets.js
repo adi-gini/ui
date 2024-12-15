@@ -123,9 +123,7 @@ const FeatureSets = ({
       return fetchFeatureSets(params.projectName, filters, config).then(result => {
         if (result) {
           const parsedResult = parseFeatureSets(result)
-
           setFeatureSets(parsedResult)
-
           return parsedResult
         }
       })
@@ -227,6 +225,21 @@ const FeatureSets = ({
     FEATURE_STORE_PAGE,
     FEATURE_SETS_TAB
   )
+
+  useEffect(() => {
+    console.log(
+      featureSets,
+      // getFeatureSetIdentifier(featureSets),
+      // collapseRowCallback(featureSets),
+      // expandRowCallback(featureSets),
+      FEATURE_STORE_PAGE,
+      FEATURE_SETS_TAB
+    )
+  }, [featureSets])
+
+  useEffect(() => {
+    console.log(featureSets)
+  }, [featureSets])
 
   const tableContent = useMemo(() => {
     return filtersStore.groupBy === GROUP_BY_NAME
@@ -417,7 +430,6 @@ const FeatureSets = ({
       rowHeightExtended: cssVariables.featureSetsRowHeightExtended
     }
   })
-
   return (
     <FeatureSetsView
       actionsMenu={actionsMenu}

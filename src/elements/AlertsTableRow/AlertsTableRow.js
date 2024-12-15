@@ -1,23 +1,4 @@
-/*
-Copyright 2019 Iguazio Systems Ltd.
-
-Licensed under the Apache License, Version 2.0 (the "License") with
-an addition restriction as set forth herein. You may not use this
-file except in compliance with the License. You may obtain a copy of
-the License at http://www.apache.org/licenses/LICENSE-2.0.
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-implied. See the License for the specific language governing
-permissions and limitations under the License.
-
-In addition, you may not use the software for any purposes that are
-illegal under applicable law, and the grant of the foregoing license
-under the Apache 2.0 license is conditioned upon your compliance with
-such restriction.
-*/
-import { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import { useParams } from 'react-router-dom'
@@ -27,14 +8,39 @@ import TableCell from '../TableCell/TableCell'
 import { DETAILS_OVERVIEW_TAB } from '../../constants'
 
 import './AlertsTableRow.scss'
+import { useGroupContent } from '../../hooks/groupContent.hook'
+import { getFeatureIdentifier } from '../../utils/getUniqueIdentifier'
 
-// TODO:   rowIsExpanded logic will be part of ML-8516
-// TODO:  selected row logic will be part of ML-8104
 const AlertsTableRow = ({ handleExpandRow, handleSelectItem, rowItem, selectedItem }) => {
   const parent = useRef()
   const params = useParams()
+  const [alerts, setAlerts] = useState([])
+
+  // const [expandedRows, setExpandedRows] = useState({})
 
   const rowClassNames = classnames('alert-row', 'table-row', 'table-body-row', 'parent-row')
+
+  const { toggleRow } = useGroupContent(
+    alerts,
+    getFeatureIdentifier,
+    () => {
+      setAlerts([{}])
+    },
+    () => {},
+    null,
+    'ALERTS-STORE',
+    'alerts'
+  )
+
+  // const { toggleRow } = useGroupContent(
+  //   rowItem,
+  //   getFeatureIdentifier,
+  //   () => {},
+  //   () => {},
+  //   null,
+  //   'ALERTS-STORE',
+  //   'alerts'
+  // )
 
   return (
     <tr className={rowClassNames} ref={parent}>
@@ -43,6 +49,7 @@ const AlertsTableRow = ({ handleExpandRow, handleSelectItem, rowItem, selectedIt
           return (
             !value.hidden && (
               <TableCell
+                toggleRow={toggleRow}
                 data={value}
                 firstCell={index === 0}
                 handleExpandRow={handleExpandRow}
@@ -55,7 +62,7 @@ const AlertsTableRow = ({ handleExpandRow, handleSelectItem, rowItem, selectedIt
                 )}
                 selectedItem={selectedItem}
                 selectItem={handleSelectItem}
-                showExpandButton={value.showExpandButton}
+                showExpandButton={true}
               />
             )
           )
@@ -66,11 +73,13 @@ const AlertsTableRow = ({ handleExpandRow, handleSelectItem, rowItem, selectedIt
 }
 
 AlertsTableRow.propTypes = {
+  handleExpandRow: PropTypes.func,
   handleSelectItem: PropTypes.func.isRequired,
-  mainRowItemsCount: PropTypes.number,
-  rowIndex: PropTypes.number.isRequired,
-  rowItem: PropTypes.shape({}).isRequired,
-  selectedItem: PropTypes.shape({}).isRequired
+  rowItem: PropTypes.shape({
+    content: PropTypes.arrayOf(PropTypes.object).isRequired,
+    data: PropTypes.object.isRequired
+  }).isRequired,
+  selectedItem: PropTypes.object
 }
 
 export default AlertsTableRow
