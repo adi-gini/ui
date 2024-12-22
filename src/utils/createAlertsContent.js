@@ -142,6 +142,14 @@ const alertsNotifications = {
   email: <Email />
 }
 
+const getName = (name, eventType) => {
+  const style = eventType === 'mm-app-failed' ? { fontWeight: 'bold' } : {}
+
+  return {
+    value: <span style={style}>{name}</span>
+  }
+}
+
 const getNotificationData = notifications =>
   notifications.map(notification => {
     return {
@@ -236,7 +244,7 @@ export const createAlertRowData = ({ ...alert }, isCrossProjects) => {
         id: `alertName.${alert.id}`,
         headerId: 'alertName',
         headerLabel: 'Alert Name',
-        value: name,
+        value: getName(alert.name, alert.event_kind).value,
         className: 'table-cell-name',
         getLink: () => getLink(alert),
         tooltip: name,
