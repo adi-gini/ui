@@ -17,6 +17,7 @@ illegal under applicable law, and the grant of the foregoing license
 under the Apache 2.0 license is conditioned upon your compliance with
 such restriction.
 */
+import classNames from 'classnames'
 import { upperFirst } from 'lodash'
 import { formatDatetime } from './datetime'
 
@@ -46,7 +47,6 @@ import {
   SEVERITY_LOW,
   SEVERITY_MEDIUM
 } from '../constants'
-import classNames from 'classnames'
 
 const getEntityTypeData = entityType => {
   switch (entityType) {
