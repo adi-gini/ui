@@ -46,6 +46,7 @@ import {
   SEVERITY_LOW,
   SEVERITY_MEDIUM
 } from '../constants'
+import classNames from 'classnames'
 
 const getEntityTypeData = entityType => {
   switch (entityType) {
@@ -143,10 +144,16 @@ const alertsNotifications = {
 }
 
 const getName = (name, eventType) => {
-  const style = eventType === 'mm-app-failed' ? { fontWeight: 'bold' } : {}
-
   return {
-    value: <span style={style}>{name}</span>
+    value: (
+      <span
+        className={classNames({
+          'alert-row-name_bold': eventType === 'mm app anomaly suspected'
+        })}
+      >
+        {name}
+      </span>
+    )
   }
 }
 
