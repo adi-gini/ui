@@ -17,7 +17,7 @@ illegal under applicable law, and the grant of the foregoing license
 under the Apache 2.0 license is conditioned upon your compliance with
 such restriction.
 */
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import AlertsView from '../Alerts/AlertsView'
@@ -30,6 +30,7 @@ import {
 } from '../../components/Alerts/alerts.util'
 import { useAlertsPageData } from '../../hooks/useAlertsPageData'
 import { useFiltersFromSearchParams } from '../../hooks/useFiltersFromSearchParams.hook'
+import { useLocation } from 'react-router-dom'
 
 const DetailsAlerts = () => {
   const [selectedAlert, setSelectedAlert] = useState({})
@@ -37,6 +38,7 @@ const DetailsAlerts = () => {
   const filtersStore = useSelector(store => store.filtersStore)
 
   const alertsFiltersConfig = useMemo(() => getAlertsFiltersConfig(true), [])
+  const currentLocation = useLocation()
 
   const alertsFilters = useFiltersFromSearchParams(
     alertsFiltersConfig,
@@ -67,16 +69,44 @@ const DetailsAlerts = () => {
   }, [paginatedAlerts])
 
   const pageData = useMemo(() => generatePageData(selectedAlert), [selectedAlert])
-
   const toggleRow = useCallback(
     (e, item) => {
       setSelectedAlert(prev => {
-        const selectedAlert = tableContent.find(({ data }) => data?.id === item?.id)
-        return prev?.id !== item.id ? selectedAlert?.data || {} : {}
+        const selected = tableContent.find(({ data }) => data?.id === item?.id)
+        const newAlert = prev?.id !== item.id ? selected?.data || {} : {}
+
+        setSearchParams(prevParams => {
+          const oldParams = Object.fromEntries(prevParams)
+
+          if (newAlert?.id) {
+            return { ...oldParams, expanded: newAlert.id }
+          } else {
+            const { expanded, ...rest } = oldParams
+            return rest
+          }
+        })
+
+        return newAlert
       })
     },
-    [tableContent]
+    [tableContent, setSearchParams]
   )
+
+  useEffect(() => {
+    const params = new URLSearchParams(currentLocation.search)
+    const expandedId = params.get('expanded')
+
+    if (expandedId) {
+      const matchingRow = tableContent.find(row => row.data?.id === expandedId)
+
+      if (matchingRow) {
+        setSelectedAlert(prev => {
+          const selectedAlert = tableContent.find(({ data }) => data?.id === matchingRow.data?.id)
+          return prev?.id !== matchingRow.data.id ? selectedAlert?.data || {} : {}
+        })
+      }
+    }
+  }, [tableContent])
 
   return (
     <AlertsView
