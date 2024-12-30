@@ -88,7 +88,7 @@ const getEntityTypeData = entityType => {
 const getTriggerCriticalTimePeriod = line => {
   const units = {
     y: 'year',
-    m: 'month',
+    m: 'minute',
     d: 'day',
     h: 'hour',
     ms: 'millisecond',
@@ -199,7 +199,7 @@ export const createAlertRowData = ({ ...alert }, isCrossProjects) => {
     const queryString = window.location.search
     const { alertName, entity_kind: entityType, entity_id, id: alertId, job, project, uid } = alert
 
-      if (entityType === MODEL_ENDPOINT_RESULT) {
+    if (entityType === MODEL_ENDPOINT_RESULT) {
       const [endpointId, , , name] = entity_id.split('.')
       return `/projects/*/alerts/${project}/${alertName}/${alertId}/${name}/${endpointId}/${DETAILS_ALERT_APPLICATION}${queryString}`
     }
