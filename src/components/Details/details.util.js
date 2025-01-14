@@ -26,6 +26,7 @@ import JobPopUp from '../../elements/DetailsPopUp/JobPopUp/JobPopUp'
 
 import {
   DATASETS_PAGE,
+  DOCUMENTS_TAB,
   FEATURE_SETS_TAB,
   FEATURE_STORE_PAGE,
   FEATURE_VECTORS_TAB,
@@ -33,7 +34,8 @@ import {
   FUNCTION_TYPE_APPLICATION,
   FUNCTION_TYPE_LOCAL,
   MODEL_ENDPOINTS_TAB,
-  MODELS_TAB
+  MODELS_TAB,
+  TAG_LATEST
 } from '../../constants'
 import { formatDatetime, generateLinkPath, parseUri } from '../../utils'
 import { isArtifactTagUnique } from '../../utils/artifacts.util'
@@ -108,12 +110,19 @@ export const generateArtifactsContent = (detailsType, selectedItem, projectName)
           name: 'tag',
           validationRules: {
             name: 'common.tag',
-            additionalRules: {
-              name: 'tagUniqueness',
-              label: 'Artifact tag must be unique',
-              pattern: isArtifactTagUnique(projectName, detailsType, selectedItem),
-              async: true
-            }
+            additionalRules: [
+              {
+                name: 'tagUniqueness',
+                label: 'Tag name must be unique',
+                pattern: isArtifactTagUnique(projectName, detailsType, selectedItem),
+                async: true
+              },
+              {
+                name: 'latest',
+                label: 'Tag name "latest" is reserved',
+                pattern: value => value !== TAG_LATEST
+              }
+            ]
           }
         },
         handleDiscardChanges: (formState, detailsStore) => {
@@ -145,7 +154,7 @@ export const generateArtifactsContent = (detailsType, selectedItem, projectName)
         copyToClipboard: true
       },
       original_source: {
-        value: selectedItem.src_path,
+        value: selectedItem.original_source,
         copyToClipboard: true
       },
       target_uri: {
@@ -174,7 +183,7 @@ export const generateArtifactsContent = (detailsType, selectedItem, projectName)
         value: formatDatetime(selectedItem.updated, 'N/A')
       },
       framework: {
-        value: detailsType === MODELS_TAB ? selectedItem.framework ?? '' : null
+        value: detailsType === MODELS_TAB ? (selectedItem.framework ?? '') : null
       },
       algorithm: {
         value: selectedItem.algorithm
@@ -184,7 +193,7 @@ export const generateArtifactsContent = (detailsType, selectedItem, projectName)
         fieldData: {
           name: 'labels'
         },
-        editModeEnabled: detailsType === MODELS_TAB,
+        editModeEnabled: detailsType === MODELS_TAB || detailsType === DOCUMENTS_TAB,
         editModeType: 'chips'
       }
     }
@@ -231,7 +240,7 @@ export const generateAlertsContent = selectedItem => {
       handleClick: () =>
         openPopUp(JobPopUp, {
           jobData: {
-            project: selectedItem?.job?.name,
+            project: selectedItem?.project,
             uid: selectedItem?.job?.jobUid,
             iter: 0
           }

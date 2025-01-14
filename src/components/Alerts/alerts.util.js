@@ -45,15 +45,17 @@ import {
 import {
   datePickerPastOptions,
   getDatePickerFilterValue,
-  PAST_24_HOUR_DATE_OPTION
+  PAST_24_HOUR_DATE_OPTION,
+  TIME_FRAME_LIMITS
 } from '../../utils/datePicker.util'
 
-export const getAlertsFiltersConfig = () => {
+export const getAlertsFiltersConfig = (timeFrameLimit = false) => {
   return {
     [NAME_FILTER]: { label: 'Alert Name:', initialValue: '' },
     [DATES_FILTER]: {
       label: 'Start time:',
-      initialValue: getDatePickerFilterValue(datePickerPastOptions, PAST_24_HOUR_DATE_OPTION)
+      initialValue: getDatePickerFilterValue(datePickerPastOptions, PAST_24_HOUR_DATE_OPTION),
+      timeFrameLimit: timeFrameLimit ? TIME_FRAME_LIMITS.MONTH : Infinity
     },
     [PROJECTS_FILTER]: { label: 'Project:', initialValue: FILTER_ALL_ITEMS, isModal: true },
     [ENTITY_TYPE]: { label: 'Entity Type:', initialValue: FILTER_ALL_ITEMS, isModal: true },
@@ -86,7 +88,7 @@ export const parseAlertsQueryParamsCallback = (paramName, paramValue) => {
   return paramValue
 }
 
-export const generatePageData = (handleFetchJobLogs, selectedAlert) => {
+export const generatePageData = (selectedAlert, handleFetchJobLogs = () => {}) => {
   return {
     page: ALERTS_PAGE,
     details: {
@@ -94,11 +96,8 @@ export const generatePageData = (handleFetchJobLogs, selectedAlert) => {
       entityType: selectedAlert.entity_kind,
       infoHeaders: alertsHeaders(selectedAlert.entity_kind),
       menu: [],
-      notifications,
-      refreshLogs: handleFetchJobLogs,
-      triggerCriteria: triggerCriteria(selectedAlert.criteria)
-    },
-    selectedAlert
+      refreshLogs: handleFetchJobLogs
+    }
   }
 }
 
@@ -112,8 +111,8 @@ export const allProjectsOption = [
 export const filterAlertsEntityTypeOptions = [
   { label: upperFirst(FILTER_ALL_ITEMS), id: FILTER_ALL_ITEMS },
   { label: upperFirst(JOB), id: JOB_KIND_JOB },
-  { label: upperFirst(ENDPOINT), id: 'model-endpoint-result' },
-  { label: upperFirst(APPLICATION), id: 'model-monitoring-application' }
+  { label: upperFirst(ENDPOINT), id: MODEL_ENDPOINT_RESULT },
+  { label: upperFirst(APPLICATION), id: MODEL_MONITORING_APPLICATION }
 ]
 
 export const filterAlertsSeverityOptions = [
@@ -175,47 +174,40 @@ export const filterAlertsEventTypeOptions = entityType => {
     return alertsEventTypeOptions
   }
 
-  return alertsEventTypeOptions.filter(option => option.ENTITY_TYPE === entityType)
+  return alertsEventTypeOptions.filter(
+    option => option.ENTITY_TYPE === entityType || option.id === FILTER_ALL_ITEMS
+  )
 }
 
 export const alertsHeaders = type => {
   if (type) {
-    const headers = [
-      { label: 'Project Name', id: 'projectName' },
-      { label: 'Job Name', id: 'jobName' },
-      { label: 'Endpoint Name', id: 'endpoint_name' },
-      { label: 'Application Name', id: 'applicationName' },
-      { label: 'Type', id: 'type' },
-      { label: 'Timestamp', id: 'timestamp' },
-      { label: 'Severity', id: SEVERITY },
-      { label: 'Job', id: 'job' }
-    ]
-
     const entityType = {
-      [JOB]: ['endpoint_name', 'applicationName'],
-      [MODEL_ENDPOINT_RESULT]: [JOB, 'jobName', 'applicationName'],
-      [MODEL_MONITORING_APPLICATION]: ['endpoint_name', JOB, 'jobName']
+      [JOB]: [
+        { label: 'Project Name', id: 'projectName' },
+        { label: 'Job Name', id: 'jobName' },
+        { label: 'Type', id: 'type' },
+        { label: 'Timestamp', id: 'timestamp' },
+        { label: 'Severity', id: SEVERITY },
+        { label: 'Job', id: 'job' }
+      ],
+      [MODEL_ENDPOINT_RESULT]: [
+        { label: 'Project Name', id: 'projectName' },
+        { label: 'Endpoint Name', id: 'endpoint_name' },
+        { label: 'Type', id: 'type' },
+        { label: 'Timestamp', id: 'timestamp' },
+        { label: 'Severity', id: SEVERITY }
+      ],
+      [MODEL_MONITORING_APPLICATION]: [
+        { label: 'Project Name', id: 'projectName' },
+        { label: 'Application Name', id: 'applicationName' },
+        { label: 'Type', id: 'type' },
+        { label: 'Timestamp', id: 'timestamp' },
+        { label: 'Severity', id: SEVERITY }
+      ]
     }
 
-    return headers.filter(header => !entityType[type]?.includes(header.id))
+    return entityType[type] || []
   }
 
   return []
 }
-
-const triggerCriteria = criteria => {
-  return [
-    {
-      label: 'Trigger criteria count',
-      id: 'triggerCriteriaCount',
-      value: criteria?.count
-    },
-    {
-      label: 'Trigger criteria time period',
-      id: 'triggerCriteriaTimePeriod',
-      value: criteria?.period
-    }
-  ]
-}
-
-export const notifications = [{ label: 'Notifications', id: 'notifications' }]

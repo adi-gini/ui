@@ -681,9 +681,11 @@ module.exports = {
     Overview_Table: commonTable(functionsOverviewTable)
   },
   jobsMonitorTabInfoPane: {
-    Arrow_Back: By.css('a.item-header__back-btn'),
+    Arrow_Back: By.css('a.link-back__icon'),
     Header: header,
     Updated: updated,
+    State_Icon: By.css('.item-header .item-header__status .state'),
+    Error_Content: By.css('.item-header .item-header__status .error-container'),
     Action_Menu: commonActionMenu,
     Cross_Close_Button: crossCloseButton,
     Info_Pane_Tab_Selector: commonInfoPaneTabSelector,
@@ -699,6 +701,8 @@ module.exports = {
     Arrow_Back: commonArrowBack,
     Header: By.css('.workflow-container .link-back__title .data-ellipsis'),
     Updated: updated,
+    State_Icon: By.css('.item-header .item-header__status .state'),
+    Error_Content: By.css('.item-header .item-header__status .error-container'),
     Action_Menu: commonActionMenu,
     Cross_Close_Button: crossCloseButton,
     Info_Pane_Tab_Selector: commonInfoPaneTabSelector,
@@ -739,6 +743,7 @@ module.exports = {
     Overview_General_Headers: commonTable(infoPaneOverviewHeaders),
     Overview_Producer_Headers: commonTable(infoPaneOverviewProducerHeaders),
     Overview_Sources_Headers: commonTable(infoPaneOverviewSourcesHeaders),
+    Source_Path: By.css('[data-testid="sources"] .info-sources__table-value .link'),
     Overview_Hash_Header: labelComponent(
       generateLabelGroup(
         '.item-info__details:nth-of-type(1) .details-item:nth-of-type(1) .details-item__header',
@@ -838,5 +843,13 @@ module.exports = {
     Header: By.css('.graph-pane__title span'),
     Cross_Close_Button: By.css('.graph-pane__title .round-icon-cp .round-icon-cp__circle'),
     Overview_Headers: commonTable(modelsRealTimeinfoPaneOverviewHeaders)
+  },
+  paginationInfoPane: {
+    BE_Pagination_Navigate_Prev: By.css('[data-testid="pagination-navigate-double-prev-btn"] button'),
+    BE_Pagination_Navigate_Next: By.css('[data-testid="pagination-navigate-next-double-btn"] button'),
+    FE_Pagination_Navigate_Next: By.css('[data-testid="pagination-navigate-next-btn"] button'), 
+    FE_Pagination_Navigate_Prev: By.css('[data-testid="pagination-navigate-prev-btn"] button'), 
+    Pagination_Page_Number: By.css('.pagination-pages .pagination-page-number'),
+    Pagination_Count: By.css('.pagination .pagination-items-count')
   }
 }

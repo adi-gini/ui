@@ -1,13 +1,45 @@
 @import '~igz-controls/scss/colors';
+@import '~igz-controls/scss/borders';
 
 .alert-row {
+  flex-wrap: wrap;
+  border: 1px solid #e2e7ff;
+
+  > * {
+    border-bottom-color: white !important;
+  }
+
   .table-body__cell.alert-row-notification-cell {
     min-width: 150px;
   }
 
-  &-name_bold {
-    font-weight: bold;
-    background: #6279e7;
+  &__item-info-notification {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  &__details-alert-icon-cell {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &__details-alert-logs {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__popup-header {
+    margin: 0;
+    padding-bottom: 12px;
+    font-size: 18px;
   }
 
   &-notification {
@@ -30,6 +62,83 @@
         padding: 1px;
         background-color: $white;
         border-radius: 50%;
+      }
+    }
+  }
+
+  td:first-child.alert-row__cell--expanded-selected-cell {
+    svg {
+      transform: rotate(90deg);
+    }
+  }
+
+  &__expanded-row {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    margin-top: 8px;
+  }
+}
+
+.notifications-item {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  margin: 12px 0 12px 0;
+  padding-right: 12px;
+
+  &:not(:last-child) {
+    margin-right: 12px;
+    border-right: $secondaryBorder;
+  }
+
+  &_icon {
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+
+    .notification-fail {
+      position: absolute;
+      top: 22px;
+      left: 27px;
+
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+
+  &__header {
+    font-weight: bold;
+    font-size: 10px;
+
+    &-text {
+      color: $topaz;
+      font-size: 15px;
+
+      &_failed {
+        color: inherit;
+      }
+
+      &_success {
+        color: $ceriseRed;
+      }
+    }
+  }
+}
+
+.alerts-logs {
+  &.modal {
+    .modal__header {
+      align-items: flex-start;
+      padding: 1rem 2rem;
+      min-height: auto;
+
+      &-title {
+        font-size: 18px;
       }
     }
   }

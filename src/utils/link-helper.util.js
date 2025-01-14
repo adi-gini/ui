@@ -42,10 +42,16 @@ export const generateUrlFromRouterPath = link => {
 }
 
 export const getCloseDetailsLink = (paramName, ignoreOrigin) => {
+  let pathname = window.location.pathname
+
+  if (ignoreOrigin && pathname.startsWith(process.env.PUBLIC_URL)) {
+    pathname = pathname.slice(process.env.PUBLIC_URL.length)
+  }
+
   const link =
-    window.location.pathname
+    pathname
       .split('/')
-      .splice(0, window.location.pathname.split('/').lastIndexOf(paramName) + 1)
+      .splice(0, pathname.split('/').lastIndexOf(paramName) + 1)
       .join('/') + window.location.search
 
   return ignoreOrigin ? link : generateUrlFromRouterPath(link)

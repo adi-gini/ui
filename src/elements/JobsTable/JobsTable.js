@@ -17,7 +17,7 @@ illegal under applicable law, and the grant of the foregoing license
 under the Apache 2.0 license is conditioned upon your compliance with
 such restriction.
 */
-import React, { useMemo, useCallback, useEffect } from 'react'
+import React, { useMemo, useCallback, useEffect, useLayoutEffect } from 'react'
 import PropTypes from 'prop-types'
 import { isEmpty } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
@@ -59,6 +59,7 @@ const JobsTable = React.forwardRef(
       context,
       filters,
       filtersConfig,
+      autoRefreshPrevValue,
       paginatedJobs,
       refreshJobs,
       requestErrorMessage,
@@ -113,14 +114,8 @@ const JobsTable = React.forwardRef(
     }, [filters, refreshJobs])
 
     const pageData = useMemo(
-      () =>
-        generatePageData(
-          handleFetchJobLogs,
-          selectedJob,
-          appStore.frontendSpec.jobs_dashboard_url,
-          handleMonitoring
-        ),
-      [handleFetchJobLogs, selectedJob, appStore.frontendSpec.jobs_dashboard_url, handleMonitoring]
+      () => generatePageData(handleFetchJobLogs, selectedJob),
+      [handleFetchJobLogs, selectedJob]
     )
 
     const setJobStatusAborting = useCallback(
@@ -228,7 +223,7 @@ const JobsTable = React.forwardRef(
           }
         })
       },
-      [params.jobName, refreshJobs, filters, dispatch, navigate]
+      [refreshJobs, filters, dispatch, params.jobName, navigate]
     )
 
     const handleConfirmDeleteJob = useCallback(
@@ -316,7 +311,7 @@ const JobsTable = React.forwardRef(
       setJobWizardMode
     ])
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       checkForSelectedJob(
         paginatedJobs,
         params.jobName,
@@ -379,6 +374,14 @@ const JobsTable = React.forwardRef(
               <Pagination
                 paginationConfig={paginationConfigJobsRef.current}
                 closeParamName={selectedJob.name}
+                disabledNextDoubleBtnTooltip={
+                  filtersStore.autoRefresh
+                    ? 'Uncheck Auto Refresh to view more results'
+                    : autoRefreshPrevValue
+                      ? 'Close detailed view and uncheck Auto Refresh to view more results'
+                      : ''
+                }
+                disableNextDoubleBtn={filtersStore.autoRefresh || autoRefreshPrevValue}
               />
             </>
           )

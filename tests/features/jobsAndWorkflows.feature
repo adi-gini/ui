@@ -51,7 +51,7 @@ Feature: Jobs and workflows
         Then "Batch_Run_Button" element on "Jobs_Monitor_Tab" should contains "Batch Run" value
         Then verify "Resource_Monitoring_Button" element visibility on "Jobs_Monitor_Tab" wizard
         Then verify "Auto_Refresh_Checkbox" element visibility on "Jobs_Monitor_Tab" wizard
-        Then "Auto_Refresh_Checkbox" element should be checked on "Jobs_Monitor_Tab" wizard
+        Then "Auto_Refresh_Checkbox" element should be unchecked on "Jobs_Monitor_Tab" wizard
         Then verify "Table_Refresh_Button" element visibility on "Jobs_Monitor_Tab" wizard
         When select "Any time" option in "Date_Picker_Filter_Dropdown" filter dropdown on "Jobs_Monitor_Tab" wizard
         And wait load page
@@ -181,7 +181,7 @@ Feature: Jobs and workflows
         And wait load page
         Then verify "Date_Picker_Filter_Dropdown" element visibility on "Jobs_Monitor_Tab" wizard
         Then verify "Date_Picker_Filter_Dropdown" dropdown element on "Jobs_Monitor_Tab" wizard should contains "Dropdown_Options"."Date_Picker_Filter_Options"
-        Then verify "Date_Picker_Filter_Dropdown" dropdown on "Jobs_Monitor_Tab" wizard selected option value "Past 24 hours"
+        Then verify "Date_Picker_Filter_Dropdown" dropdown on "Jobs_Monitor_Tab" wizard selected option value "Past week"
         Then verify "Jobs_Monitor_Table" element visibility on "Jobs_Monitor_Tab" wizard
         When select "Any time" option in "Date_Picker_Filter_Dropdown" filter dropdown on "Jobs_Monitor_Tab" wizard
         And wait load page
@@ -431,9 +431,9 @@ Feature: Jobs and workflows
         And hover "MLRun_Logo" component on "commonPagesHeader" wizard
         And wait load page
         Then verify "Auto_Refresh_Checkbox" element visibility on "Jobs_Monitor_Tab" wizard
-        Then "Auto_Refresh_Checkbox" element should be checked on "Jobs_Monitor_Tab" wizard
-        Then uncheck "Auto_Refresh_Checkbox" element on "Jobs_Monitor_Tab" wizard
         Then "Auto_Refresh_Checkbox" element should be unchecked on "Jobs_Monitor_Tab" wizard
+        Then check "Auto_Refresh_Checkbox" element on "Jobs_Monitor_Tab" wizard
+        Then "Auto_Refresh_Checkbox" element should be checked on "Jobs_Monitor_Tab" wizard
         When pick up "Custom range" from "11/07/2021 18:00" to "11/08/2021 18:00" in "Date_Time_Picker" via "Date_Picker_Filter_Dropdown" on "Jobs_Monitor_Tab" wizard
         Then verify from "11/07/2021 18:00" to "11/08/2021 18:00" filter band in "Custom_Range_Filter_Dropdown" filter dropdown on "Jobs_Monitor_Tab" wizard
         Then value in "datetime" column in "Jobs_Monitor_Table" on "Jobs_Monitor_Tab" wizard should be from "11/07/2021 18:00" to "11/08/2021 18:00"
@@ -467,12 +467,9 @@ Feature: Jobs and workflows
         Then verify "Info_Pane_Tab_Selector" on "Jobs_Monitor_Tab_Info_Pane" wizard should contains "Jobs_Monitor_Tab_Info_Pane"."Tab_List"
         Then verify "Overview" tab is active in "Info_Pane_Tab_Selector" on "Jobs_Monitor_Tab_Info_Pane" wizard
         Then verify "Overview_Headers" on "Jobs_Monitor_Tab_Info_Pane" wizard should contains "Jobs_Monitor_Tab_Info_Pane"."Overview_Headers"
-        Then click on "Arrow_Back" element on "Jobs_Monitor_Tab_Info_Pane" wizard
-        And wait load page
-        Then verify from "01/01/2021 00:00" to "01/01/2023 00:00" filter band in "Custom_Range_Filter_Dropdown" filter dropdown on "Jobs_Monitor_Tab" wizard
         Then click on "Arrow_Back" element on "Jobs_Monitor_Tab" wizard
         And wait load page
-        Then verify from "01/01/2021 00:00" to "01/01/2023 00:00" filter band in "Custom_Range_Filter_Dropdown" filter dropdown on "Jobs_Monitor_Tab" wizard
+        Then verify "Date_Picker_Filter_Dropdown" dropdown on "Jobs_Monitor_Tab" wizard selected option value "Any time"
 
     @MLJW
     @smoke
@@ -502,8 +499,6 @@ Feature: Jobs and workflows
         Then verify "Header" element visibility on "Jobs_Monitor_Tab_Info_Pane" wizard
         Then verify "Updated" element visibility on "Jobs_Monitor_Tab_Info_Pane" wizard
         Then verify "Cross_Close_Button" element visibility on "Jobs_Monitor_Tab_Info_Pane" wizard
-        Then verify "Resource_Monitoring_Button" element visibility on "Jobs_Monitor_Tab_Info_Pane" wizard
-        Then verify "Info_Pane_Refresh_Button" element visibility on "Jobs_Monitor_Tab_Info_Pane" wizard
         Then verify "Info_Pane_Tab_Selector" on "Jobs_Monitor_Tab_Info_Pane" wizard should contains "Jobs_Monitor_Tab_Info_Pane"."Tab_List"
         Then verify "Overview" tab is active in "Info_Pane_Tab_Selector" on "Jobs_Monitor_Tab_Info_Pane" wizard
         Then verify "Overview_Headers" on "Jobs_Monitor_Tab_Info_Pane" wizard should contains "Jobs_Monitor_Tab_Info_Pane"."Overview_Headers"
@@ -521,43 +516,63 @@ Feature: Jobs and workflows
         And wait load page
         Then verify "Monitor Jobs" tab is active in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
         When select "Any time" option in "Date_Picker_Filter_Dropdown" filter dropdown on "Jobs_Monitor_Tab" wizard
-        Then select "Delete" option in action menu on "Jobs_Monitor_Tab" wizard in "Jobs_Monitor_Table" table at row with "test-m_ingest" value in "name" column
+        Then verify action menu on "Jobs_Monitor_Tab" wizard in "Jobs_Monitor_Table" table with "test-m_ingest" value in "name" column should contains "Jobs_And_Workflows"."Job_List_Action_Menu_Options" without scroll
+        Then select "Delete run" option in action menu on "Jobs_Monitor_Tab" wizard in "Jobs_Monitor_Table" table at row with "test-m_ingest" value in "name" column
         And wait load page
         Then verify if "Confirm_Popup" popup dialog appears
         Then "Title" element on "Confirm_Popup" should contains "Delete job?" value
         Then verify "Cross_Cancel_Button" element visibility on "Confirm_Popup" wizard
         Then verify "Confirm_Dialog_Message" element visibility on "Confirm_Popup" wizard
+        Then "Confirm_Dialog_Message" component on "Confirm_Popup" should be equal "Jobs_And_Workflows"."Delete_Run_Message"
         Then verify "Cancel_Button" element visibility on "Confirm_Popup" wizard
         Then "Cancel_Button" element on "Confirm_Popup" should contains "Cancel" value
         Then verify "Delete_Button" element visibility on "Confirm_Popup" wizard
+        Then "Delete_Button" element on "Confirm_Popup" should contains "Delete" value
+        Then verify "Delete_Button" element on "Confirm_Popup" wizard is enabled
+        When click on "Cancel_Button" element on "Confirm_Popup" wizard
+        Then select "Delete all runs" option in action menu on "Jobs_Monitor_Tab" wizard in "Jobs_Monitor_Table" table at row with "test-m_ingest" value in "name" column
+        And wait load page
+        Then verify if "Confirm_Popup" popup dialog appears
+        Then "Title" element on "Confirm_Popup" should contains "Delete job?" value
+        Then verify "Cross_Cancel_Button" element visibility on "Confirm_Popup" wizard
+        Then verify "Confirm_Dialog_Message" element visibility on "Confirm_Popup" wizard
+        Then "Confirm_Dialog_Message" component on "Confirm_Popup" should be equal "Jobs_And_Workflows"."Delete_All_Runs_Message"
+        Then verify "Cancel_Button" element visibility on "Confirm_Popup" wizard
+        Then "Cancel_Button" element on "Confirm_Popup" should contains "Cancel" value
+        Then verify "Delete_Button" element visibility on "Confirm_Popup" wizard
+        Then verify "Delete_Button" element on "Confirm_Popup" wizard is enabled
         Then "Delete_Button" element on "Confirm_Popup" should contains "Delete" value
         When click on "Cancel_Button" element on "Confirm_Popup" wizard
         When click on cell with row index 1 in "name" column in "Jobs_Monitor_Table" table on "Jobs_Monitor_Tab" wizard
         And wait load page
         Then verify options in action menu on "Jobs_Monitor_Tab" wizard in "Jobs_Monitor_Table" table with "Job" value in "type" column should contains "Jobs_And_Workflows"."Job_Action_Menu_Options"
-        Then select "Delete" option in action menu on "Jobs_Monitor_Tab" wizard in "Jobs_Monitor_Table" table at row with "1b1097f5e1bf439f82b61910f03368ae" value in "name" column
+        Then select "Delete run" option in action menu on "Jobs_Monitor_Tab" wizard in "Jobs_Monitor_Table" table at row with "1b1097f5e1bf439f82b61910f03368ae" value in "name" column
         And wait load page
         Then verify if "Confirm_Popup" popup dialog appears
         Then "Title" element on "Confirm_Popup" should contains "Delete job?" value
         Then verify "Cross_Cancel_Button" element visibility on "Confirm_Popup" wizard
         Then verify "Confirm_Dialog_Message" element visibility on "Confirm_Popup" wizard
+        Then "Confirm_Dialog_Message" component on "Confirm_Popup" should be equal "Jobs_And_Workflows"."Delete_Run_Message"
         Then verify "Cancel_Button" element visibility on "Confirm_Popup" wizard
         Then "Cancel_Button" element on "Confirm_Popup" should contains "Cancel" value
         Then verify "Delete_Button" element visibility on "Confirm_Popup" wizard
+        Then verify "Delete_Button" element on "Confirm_Popup" wizard is enabled
         Then "Delete_Button" element on "Confirm_Popup" should contains "Delete" value
         When click on "Cancel_Button" element on "Confirm_Popup" wizard
         When click on cell with row index 1 in "name" column in "Jobs_Monitor_Table" table on "Jobs_Monitor_Tab" wizard
         And wait load page
         Then verify "Action_Menu" dropdown element on "Jobs_Monitor_Tab_Info_Pane" wizard should contains "Jobs_And_Workflows"."Job_Overview_Action_Menu_Options"
-        Then select "Delete" option in action menu on "Jobs_Monitor_Tab_Info_Pane" wizard
+        Then select "Delete run" option in action menu on "Jobs_Monitor_Tab_Info_Pane" wizard
         And wait load page
         Then verify if "Confirm_Popup" popup dialog appears
         Then "Title" element on "Confirm_Popup" should contains "Delete job?" value
         Then verify "Cross_Cancel_Button" element visibility on "Confirm_Popup" wizard
         Then verify "Confirm_Dialog_Message" element visibility on "Confirm_Popup" wizard
+        Then "Confirm_Dialog_Message" component on "Confirm_Popup" should be equal "Jobs_And_Workflows"."Delete_Run_Message"
         Then verify "Cancel_Button" element visibility on "Confirm_Popup" wizard
         Then "Cancel_Button" element on "Confirm_Popup" should contains "Cancel" value
         Then verify "Delete_Button" element visibility on "Confirm_Popup" wizard
+        Then verify "Delete_Button" element on "Confirm_Popup" wizard is enabled
         Then "Delete_Button" element on "Confirm_Popup" should contains "Delete" value
         When click on "Cancel_Button" element on "Confirm_Popup" wizard
         
@@ -580,7 +595,7 @@ Feature: Jobs and workflows
         Then click on "Title" element on "FilterBy_Popup" wizard
         Then click on "Apply_Button" element on "FilterBy_Popup" wizard
         And wait load page
-        When click on cell with row index 1 in "name" column in "Schedule_Monitor_Table" table on "Schedule_Monitor_Tab" wizard
+        When click on cell with row index 1 in "name" column in "Jobs_Monitor_Table" table on "Jobs_Monitor_Tab" wizard
         And wait load page
         When click on cell with row index 1 in "name" column in "Jobs_Monitor_Table" table on "Jobs_Monitor_Tab" wizard
         And wait load page
@@ -635,6 +650,72 @@ Feature: Jobs and workflows
         Then select "2" option in "Iterations_Dropdown" dropdown on "Artifacts_Info_Pane" wizard
         And wait load page
         Then verify "Artifacts_Table" element visibility on "Artifacts_Info_Pane" wizard
+    
+    @MLJM
+    @smoke
+    Scenario: MLJW090 - Check Pagination info pane on on Jobs Monitor Page
+        Given open url
+        And wait load page
+        And click on row root with value "cat-vs-dog-classification" in "name" column in "Projects_Table" table on "Projects" wizard
+        And wait load page
+        And hover "Project_Navigation_Toggler" component on "commonPagesHeader" wizard
+        And click on cell with value "Jobs and workflows" in "link" column in "General_Info_Quick_Links" table on "commonPagesHeader" wizard
+        And wait load page
+        Then verify "Monitor Jobs" tab is active in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
+        Then verify "BE_Pagination_Navigate_Prev" element visibility on "Pagination_Info_Pane" wizard
+        Then verify "BE_Pagination_Navigate_Prev" element on "Pagination_Info_Pane" wizard is disabled
+        Then verify "BE_Pagination_Navigate_Next" element visibility on "Pagination_Info_Pane" wizard
+        Then verify "BE_Pagination_Navigate_Next" element on "Pagination_Info_Pane" wizard is disabled
+        Then verify "FE_Pagination_Navigate_Next" element visibility on "Pagination_Info_Pane" wizard
+        Then verify "FE_Pagination_Navigate_Next" element on "Pagination_Info_Pane" wizard is disabled
+        Then verify "FE_Pagination_Navigate_Prev" element visibility on "Pagination_Info_Pane" wizard
+        Then verify "FE_Pagination_Navigate_Prev" element on "Pagination_Info_Pane" wizard is disabled
+        Then verify "Pagination_Page_Number" element visibility on "Pagination_Info_Pane" wizard
+        Then "Pagination_Page_Number" element on "Pagination_Info_Pane" should contains "1" value
+        Then verify "Pagination_Count" element visibility on "Pagination_Info_Pane" wizard
+        Then "Pagination_Count" element on "Pagination_Info_Pane" should contains "Showing 1 - 5" value
+        When click on cell with row index 1 in "name" column in "Jobs_Monitor_Table" table on "Jobs_Monitor_Tab" wizard
+        And wait load page
+        Then verify "BE_Pagination_Navigate_Prev" element visibility on "Pagination_Info_Pane" wizard
+        Then verify "BE_Pagination_Navigate_Prev" element on "Pagination_Info_Pane" wizard is disabled
+        Then verify "BE_Pagination_Navigate_Next" element visibility on "Pagination_Info_Pane" wizard
+        Then verify "BE_Pagination_Navigate_Next" element on "Pagination_Info_Pane" wizard is disabled
+        Then verify "FE_Pagination_Navigate_Next" element visibility on "Pagination_Info_Pane" wizard
+        Then verify "FE_Pagination_Navigate_Next" element on "Pagination_Info_Pane" wizard is disabled
+        Then verify "FE_Pagination_Navigate_Prev" element visibility on "Pagination_Info_Pane" wizard
+        Then verify "FE_Pagination_Navigate_Prev" element on "Pagination_Info_Pane" wizard is disabled
+        Then verify "Pagination_Page_Number" element visibility on "Pagination_Info_Pane" wizard
+        Then "Pagination_Page_Number" element on "Pagination_Info_Pane" should contains "1" value
+        Then verify "Pagination_Count" element visibility on "Pagination_Info_Pane" wizard
+        Then "Pagination_Count" element on "Pagination_Info_Pane" should contains "Showing 1 - 1" value
+        When click on cell with row index 1 in "name" column in "Jobs_Monitor_Table" table on "Jobs_Monitor_Tab" wizard
+        And wait load page
+        Then verify "BE_Pagination_Navigate_Prev" element visibility on "Pagination_Info_Pane" wizard
+        Then verify "BE_Pagination_Navigate_Prev" element on "Pagination_Info_Pane" wizard is disabled
+        Then verify "BE_Pagination_Navigate_Next" element visibility on "Pagination_Info_Pane" wizard
+        Then verify "BE_Pagination_Navigate_Next" element on "Pagination_Info_Pane" wizard is disabled
+        Then verify "FE_Pagination_Navigate_Next" element visibility on "Pagination_Info_Pane" wizard
+        Then verify "FE_Pagination_Navigate_Next" element on "Pagination_Info_Pane" wizard is disabled
+        Then verify "FE_Pagination_Navigate_Prev" element visibility on "Pagination_Info_Pane" wizard
+        Then verify "FE_Pagination_Navigate_Prev" element on "Pagination_Info_Pane" wizard is disabled
+        Then verify "Pagination_Page_Number" element visibility on "Pagination_Info_Pane" wizard
+        Then "Pagination_Page_Number" element on "Pagination_Info_Pane" should contains "1" value
+        Then verify "Pagination_Count" element visibility on "Pagination_Info_Pane" wizard
+        Then "Pagination_Count" element on "Pagination_Info_Pane" should contains "Showing 1 - 1" value
+        Then click on "Arrow_Back" element on "Jobs_Monitor_Tab_Info_Pane" wizard
+        And wait load page
+        Then verify "BE_Pagination_Navigate_Prev" element visibility on "Pagination_Info_Pane" wizard
+        Then verify "BE_Pagination_Navigate_Prev" element on "Pagination_Info_Pane" wizard is disabled
+        Then verify "BE_Pagination_Navigate_Next" element visibility on "Pagination_Info_Pane" wizard
+        Then verify "BE_Pagination_Navigate_Next" element on "Pagination_Info_Pane" wizard is disabled
+        Then verify "FE_Pagination_Navigate_Next" element visibility on "Pagination_Info_Pane" wizard
+        Then verify "FE_Pagination_Navigate_Next" element on "Pagination_Info_Pane" wizard is disabled
+        Then verify "FE_Pagination_Navigate_Prev" element visibility on "Pagination_Info_Pane" wizard
+        Then verify "FE_Pagination_Navigate_Prev" element on "Pagination_Info_Pane" wizard is disabled
+        Then verify "Pagination_Page_Number" element visibility on "Pagination_Info_Pane" wizard
+        Then "Pagination_Page_Number" element on "Pagination_Info_Pane" should contains "1" value
+        Then verify "Pagination_Count" element visibility on "Pagination_Info_Pane" wizard
+        Then "Pagination_Count" element on "Pagination_Info_Pane" should contains "Showing 1 - 5" value
 
     @MLJW
     @passive
@@ -683,6 +764,26 @@ Feature: Jobs and workflows
         Then "Cancel_Button" element on "Common_Popup" should contains "Cancel" value
         Then verify "Delete_Button" element visibility on "Common_Popup" wizard
         Then "Delete_Button" element on "Common_Popup" should contains "Delete" value
+        Then click on "Cancel_Button" element on "Common_Popup" wizard
+        And wait load page
+        Then select "project" with "cat-vs-dog-classification" value in breadcrumbs menu
+        And wait load page
+        Then verify breadcrumbs "project" label should be equal "cat-vs-dog-classification" value
+        Then verify "Schedule" tab is active in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
+        Then select "Delete" option in action menu on "Schedule_Monitor_Tab" wizard in "Schedule_Monitor_Table" table at row with "tf2-serving" value in "name" column
+        Then verify if "Common_Popup" popup dialog appears
+        Then click on "Delete_Button" element on "Common_Popup" wizard
+        And wait load page
+        Then verify "Notification_Pop_Up" element visibility on "Notification_Popup" wizard
+        And wait load page
+        And wait load page
+        Then "Notification_Pop_Up" element on "Notification_Popup" should contains "Job is successfully deleted" value
+        And wait load page
+        Then verify "Notification_Pop_Up_Cross_Close_Button" element visibility on "Notification_Popup" wizard
+        Then click on "Notification_Pop_Up_Cross_Close_Button" element on "Notification_Popup" wizard
+        Then check "tf2-serving" value not in "name" column in "Schedule_Monitor_Table" table on "Schedule_Monitor_Tab" wizard
+        When click on cell with row index 1 in "name" column in "Schedule_Monitor_Table" table on "Schedule_Monitor_Tab" wizard
+        And wait load page
 
     @MLJW
     @smoke
@@ -1031,7 +1132,7 @@ Feature: Jobs and workflows
         Then click on "Title" element on "FilterBy_Popup" wizard
         Then click on "Apply_Button" element on "FilterBy_Popup" wizard
         And wait load page
-        Then verify options in action menu on "Jobs_Monitor_Tab" wizard in "Jobs_Monitor_Table" table with "Error" value in "status" column should contains "Jobs_And_Workflows"."Job_Action_Menu_Options"
+        Then verify options in action menu on "Jobs_Monitor_Tab" wizard in "Jobs_Monitor_Table" table with "Error. [Errno 2] No such file or directory: \'\'" value in "status" column should contains "Jobs_And_Workflows"."Job_Action_Menu_Options"
         Then click on "Table_FilterBy_Button" element on "Jobs_Monitor_Tab" wizard
         Then select "Error" option in "Status_Filter_Dropdown" filter dropdown on "FilterBy_Popup" wizard
         Then click on "Title" element on "FilterBy_Popup" wizard
@@ -1247,7 +1348,6 @@ Feature: Jobs and workflows
         Then "Notification_Pop_Up" element on "Notification_Popup" should contains "This function either does not exist or was deleted" value
         Then verify "Notification_Pop_Up_Cross_Close_Button" element visibility on "Notification_Popup" wizard
         Then click on "Notification_Pop_Up_Cross_Close_Button" element on "Notification_Popup" wizard
-
 
     @MLJW
     @smoke
@@ -2405,6 +2505,68 @@ Feature: Jobs and workflows
         Then verify "Hyper_Toggle_Switch" element not exists in "Parameters_Accordion" on "Modal_Wizard_Form" wizard
     
     @MLJW
+    @smoke
+    Scenario: MLJW049 - Check Abort action on Monitor Jobs tab
+        Given open url
+        And wait load page
+        And click on row root with value "default" in "name" column in "Projects_Table" table on "Projects" wizard
+        And wait load page
+        And hover "Project_Navigation_Toggler" component on "commonPagesHeader" wizard
+        And click on cell with value "Jobs and workflows" in "link" column in "General_Info_Quick_Links" table on "commonPagesHeader" wizard
+        And hover "MLRun_Logo" component on "commonPagesHeader" wizard
+        And wait load page
+        Then verify "Monitor Jobs" tab is active in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
+        Then select "Abort" option in action menu on "Jobs_Monitor_Tab" wizard in "Jobs_Monitor_Table" table at row with "erann-test" value in "name" column
+        And wait load page
+        Then verify if "Common_Popup" popup dialog appears
+        Then verify "Cross_Cancel_Button" element visibility on "Common_Popup" wizard
+        Then verify "Title" element visibility on "Common_Popup" wizard
+        Then click on "Cross_Cancel_Button" element on "Common_Popup" wizard
+        And wait load page
+        Then verify "Title" element not exists on "Common_Popup" wizard
+        Then select "Abort" option in action menu on "Jobs_Monitor_Tab" wizard in "Jobs_Monitor_Table" table at row with "erann-test" value in "name" column
+        And wait load page
+        Then verify if "Common_Popup" popup dialog appears
+        Then verify "Cross_Cancel_Button" element visibility on "Common_Popup" wizard
+        Then verify "Title" element visibility on "Common_Popup" wizard
+        Then "Title" element on "Common_Popup" should contains "Abort job?" value
+        Then "Description" element on "Common_Popup" should contains "Are you sure you want to abort the job \"erann-test\"?" value
+        Then verify "Confirm_Button" element visibility on "Common_Popup" wizard
+        Then verify "Confirm_Button" element on "Common_Popup" wizard is enabled
+        Then "Confirm_Button" element on "Common_Popup" should contains "Abort" value
+        Then verify "Cancel_Button" element visibility on "Common_Popup" wizard
+        Then verify "Cancel_Button" element on "Common_Popup" wizard is enabled
+        Then "Cancel_Button" element on "Common_Popup" should contains "Cancel" value
+        Then click on "Cancel_Button" element on "Common_Popup" wizard
+        And wait load page
+        Then verify "Title" element not exists on "Common_Popup" wizard
+        Then select "Abort" option in action menu on "Jobs_Monitor_Tab" wizard in "Jobs_Monitor_Table" table at row with "erann-test" value in "name" column
+        And wait load page
+        Then click on "Confirm_Button" element on "Common_Popup" wizard
+        And wait load page
+        Then verify "Notification_Pop_Up" element visibility on "Notification_Popup" wizard
+        And wait load page
+        Then "Notification_Pop_Up" element on "Notification_Popup" should contains "Job abortion in progress" value
+        And wait load page
+        Then verify "Notification_Pop_Up_Cross_Close_Button" element visibility on "Notification_Popup" wizard
+        Then click on "Notification_Pop_Up_Cross_Close_Button" element on "Notification_Popup" wizard
+        Then verify "Table_Refresh_Button" element visibility on "Jobs_Monitor_Tab" wizard
+        Then click on "Table_Refresh_Button" element on "Jobs_Monitor_Tab" wizard
+        And wait load page
+        Then value in "status" column with "tooltip" in "Jobs_Monitor_Table" on "Jobs_Monitor_Tab" wizard should contains "Aborting"
+        Then wait for 10 seconds
+        Then verify "Notification_Pop_Up" element visibility on "Notification_Popup" wizard
+        And wait load page
+        Then "Notification_Pop_Up" element on "Notification_Popup" should contains "Job erann-test was aborted" value
+        And wait load page
+        Then verify "Notification_Pop_Up_Cross_Close_Button" element visibility on "Notification_Popup" wizard
+        Then click on "Notification_Pop_Up_Cross_Close_Button" element on "Notification_Popup" wizard
+        Then verify "Table_Refresh_Button" element visibility on "Jobs_Monitor_Tab" wizard
+        Then click on "Table_Refresh_Button" element on "Jobs_Monitor_Tab" wizard
+        And wait load page
+        Then value in "status" column with "tooltip" in "Jobs_Monitor_Table" on "Jobs_Monitor_Tab" wizard should contains "Aborted"
+    
+    @MLJW
     @passive
     @smoke
     Scenario: MLJW087 - Check Retry option in action menu on Workflows Monitor tab
@@ -2433,4 +2595,116 @@ Feature: Jobs and workflows
         Then "Retry_Button" element on "Notification_Popup" should contains "RETRY" value
         Then verify "Notification_Pop_Up_Cross_Close_Button" element visibility on "Notification_Popup" wizard
         Then click on "Notification_Pop_Up_Cross_Close_Button" element on "Notification_Popup" wizard
-         
+
+    @MLJW
+    @passive
+    @smoke
+    Scenario: MLJW088 - Verify filtering by workflows status on Workflows Monitor tab
+        Given open url
+        And wait load page
+        And click on row root with value "cat-vs-dog-classification" in "name" column in "Projects_Table" table on "Projects" wizard
+        And wait load page
+        And hover "Project_Navigation_Toggler" component on "commonPagesHeader" wizard
+        And click on cell with value "Jobs and workflows" in "link" column in "General_Info_Quick_Links" table on "commonPagesHeader" wizard
+        And hover "MLRun_Logo" component on "commonPagesHeader" wizard
+        And wait load page
+        And select "Monitor Workflows" tab in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
+        When select "Any time" option in "Date_Picker_Filter_Dropdown" filter dropdown on "Jobs_Monitor_Tab" wizard
+        And wait load page
+        Then value in "status" column with "tooltip" in "Workflows_Monitor_Table" on "Workflows_Monitor_Tab" wizard should contains "Completed"
+        Then value in "status" column with "tooltip" in "Workflows_Monitor_Table" on "Workflows_Monitor_Tab" wizard should contains "Failed"
+        When click on cell with row index 2 in "name" column in "Workflows_Monitor_Table" table on "Workflows_Monitor_Tab" wizard
+        And wait load page
+        Then click on "Toggle_View_Button" element on "Workflows_Monitor_Tab" wizard
+        And wait load page
+        Then value in "status" column with "tooltip" in "Workflow_List_View_Table" on "Workflows_Monitor_Tab" wizard should contains "Error"
+        Then value in "status" column with "tooltip" in "Workflow_List_View_Table" on "Workflows_Monitor_Tab" wizard should contains "Completed"
+        And hover "MLRun_Logo" component on "commonPagesHeader" wizard
+        And wait load page
+        When click on cell with row index 2 in "name" column in "Workflow_List_View_Table" table on "Workflows_Monitor_Tab" wizard
+        And wait load page
+        Then verify "State_Icon" element visibility on "Workflows_Monitor_Tab_Info_Pane" wizard
+        Then verify "State_Icon" element on "Workflows_Monitor_Tab_Info_Pane" wizard should display hover tooltip "Common_Tooltips"."Error_Content_Workflow"
+        Then verify "Error_Content" element visibility on "Workflows_Monitor_Tab_Info_Pane" wizard
+    
+    @MLJW
+    @smoke
+    Scenario: MLJW089 - Check Delete run / Delete all runs options in Action menu
+        Given open url
+        And wait load page
+        And click on row root with value "getting-started-tutorial-admin" in "name" column in "Projects_Table" table on "Projects" wizard
+        And wait load page
+        And hover "Project_Navigation_Toggler" component on "commonPagesHeader" wizard
+        And click on cell with value "Jobs and workflows" in "link" column in "General_Info_Quick_Links" table on "commonPagesHeader" wizard
+        And hover "MLRun_Logo" component on "commonPagesHeader" wizard
+        And wait load page
+        Then verify "Monitor Jobs" tab is active in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
+        When select "Any time" option in "Date_Picker_Filter_Dropdown" filter dropdown on "Jobs_Monitor_Tab" wizard
+        Then type value "prep_data" to "Table_Name_Filter_Input" field on "Jobs_Monitor_Tab" wizard
+        Then click on "Table_Refresh_Button" element on "Jobs_Monitor_Tab" wizard
+        And wait load page
+        Then value in "name" column with "text" in "Jobs_Monitor_Table" on "Jobs_Monitor_Tab" wizard should contains "prep_data"
+        Then verify action menu on "Jobs_Monitor_Tab" wizard in "Jobs_Monitor_Table" table with "prep_data" value in "name" column should contains "Jobs_And_Workflows"."Job_List_Action_Menu_Options" without scroll
+        When click on cell with row index 1 in "name" column in "Jobs_Monitor_Table" table on "Jobs_Monitor_Tab" wizard
+        And wait load page
+        Then verify that 3 row elements are displayed in "Jobs_Monitor_Table" on "Jobs_Monitor_Tab" wizard
+        Then click on "Arrow_Back" element on "Jobs_Monitor_Tab_Info_Pane" wizard
+        And wait load page
+        Then select "Delete run" option in action menu on "Jobs_Monitor_Tab" wizard in "Jobs_Monitor_Table" table at row with "prep_data" value in "name" column
+        And wait load page
+        Then verify if "Confirm_Popup" popup dialog appears
+        Then "Confirm_Dialog_Message" component on "Confirm_Popup" should be equal "Jobs_And_Workflows"."Delete_Run_Message"
+        When click on "Delete_Button" element on "Confirm_Popup" wizard
+        And wait load page
+        Then verify "Notification_Pop_Up" element visibility on "Notification_Popup" wizard
+        And wait load page
+        And wait load page
+        Then "Notification_Pop_Up" element on "Notification_Popup" should contains "Job is successfully deleted" value
+        And wait load page
+        Then verify "Notification_Pop_Up_Cross_Close_Button" element visibility on "Notification_Popup" wizard
+        Then click on "Notification_Pop_Up_Cross_Close_Button" element on "Notification_Popup" wizard
+        When click on cell with row index 1 in "name" column in "Jobs_Monitor_Table" table on "Jobs_Monitor_Tab" wizard
+        And wait load page
+        Then verify that 2 row elements are displayed in "Jobs_Monitor_Table" on "Jobs_Monitor_Tab" wizard
+        Then click on "Arrow_Back" element on "Jobs_Monitor_Tab" wizard
+        And wait load page
+        Then select "Delete all runs" option in action menu on "Jobs_Monitor_Tab" wizard in "Jobs_Monitor_Table" table at row with "prep_data" value in "name" column
+        And wait load page
+        Then verify if "Confirm_Popup" popup dialog appears
+        Then "Confirm_Dialog_Message" component on "Confirm_Popup" should be equal "Jobs_And_Workflows"."Delete_All_Runs_Message"
+        When click on "Delete_Button" element on "Confirm_Popup" wizard
+        And wait load page
+        Then verify "Notification_Pop_Up" element visibility on "Notification_Popup" wizard
+        And wait load page
+        And wait load page
+        Then "Notification_Pop_Up" element on "Notification_Popup" should contains "Job is successfully deleted" value
+        And wait load page
+        Then verify "Notification_Pop_Up_Cross_Close_Button" element visibility on "Notification_Popup" wizard
+        Then click on "Notification_Pop_Up_Cross_Close_Button" element on "Notification_Popup" wizard
+        And verify "No_Data_Message" element visibility on "commonPagesHeader" wizard
+        Then "No_Data_Message" component on "commonPagesHeader" should be equal "No_Data_Message"."Common_Message_Monitor_Jobs_Name"
+        Then type value "test" to "Table_Name_Filter_Input" field on "Jobs_Monitor_Tab" wizard
+        Then click on "Table_Refresh_Button" element on "Jobs_Monitor_Tab" wizard
+        And wait load page
+        When click on cell with row index 1 in "name" column in "Jobs_Monitor_Table" table on "Jobs_Monitor_Tab" wizard
+        And wait load page
+        Then verify that 3 row elements are displayed in "Jobs_Monitor_Table" on "Jobs_Monitor_Tab" wizard
+        When click on cell with row index 1 in "name" column in "Jobs_Monitor_Table" table on "Jobs_Monitor_Tab" wizard
+        And wait load page
+        Then verify "Action_Menu" dropdown element on "Jobs_Monitor_Tab_Info_Pane" wizard should contains "Jobs_And_Workflows"."Job_Overview_Action_Menu_Options"
+        Then select "Delete run" option in action menu on "Jobs_Monitor_Tab_Info_Pane" wizard
+        And wait load page
+        Then verify if "Confirm_Popup" popup dialog appears
+        Then "Confirm_Dialog_Message" component on "Confirm_Popup" should be equal "Jobs_And_Workflows"."Delete_Run_Message"
+        When click on "Delete_Button" element on "Confirm_Popup" wizard
+        And wait load page
+        Then verify "Notification_Pop_Up" element visibility on "Notification_Popup" wizard
+        And wait load page
+        And wait load page
+        Then "Notification_Pop_Up" element on "Notification_Popup" should contains "Job is successfully deleted" value
+        And wait load page
+        Then verify "Notification_Pop_Up_Cross_Close_Button" element visibility on "Notification_Popup" wizard
+        Then click on "Notification_Pop_Up_Cross_Close_Button" element on "Notification_Popup" wizard
+        Then verify that 2 row elements are displayed in "Jobs_Monitor_Table" on "Jobs_Monitor_Tab" wizard
+
+        

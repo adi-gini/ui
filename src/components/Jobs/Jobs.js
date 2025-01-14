@@ -64,6 +64,7 @@ export const JobsContext = React.createContext({})
 const Jobs = () => {
   const [confirmData, setConfirmData] = useState(null)
   const [selectedTab, setSelectedTab] = useState(null)
+  const [autoRefreshPrevValue, setAutoRefreshPrevValue] = useState(false)
   const [selectedJob, setSelectedJob] = useState({})
   const params = useParams()
   const navigate = useNavigate()
@@ -124,7 +125,7 @@ const Jobs = () => {
     setScheduledJobs,
     setSearchParams,
     terminateAbortTasksPolling
-  } = useJobsPageData(setSelectedJob, initialTabData, selectedTab)
+  } = useJobsPageData(initialTabData, selectedTab)
 
   const handleActionsMenuClick = () => {
     setJobWizardMode(PANEL_CREATE_MODE)
@@ -142,7 +143,10 @@ const Jobs = () => {
     return defaultsDeep(
       {
         [MONITOR_JOBS_TAB]: {
-          handleRefresh: handleRefreshJobs
+          handleRefresh: (...args) => {
+            setSelectedJob({})
+            handleRefreshJobs(...args)
+          }
         },
         [MONITOR_WORKFLOWS_TAB]: {
           handleRefresh: getWorkflows
@@ -227,21 +231,26 @@ const Jobs = () => {
                       : '',
                     variant: TERTIARY_BUTTON,
                     disabled: !appStore.frontendSpec.jobs_dashboard_url,
-                    onClick: handleMonitoring
+                    onClick: () => handleMonitoring(selectedJob, true)
                   }
                 ]}
-                autoRefreshIsEnabled={selectedTab === MONITOR_JOBS_TAB}
                 autoRefreshIsStopped={
-                  jobWizardIsOpened || jobsStore.loading || !isEmpty(selectedJob)
+                  jobWizardIsOpened ||
+                  jobsStore.loading ||
+                  Boolean(jobsStore.jobLoadingCounter)
                 }
+                autoRefreshStopTrigger={!isEmpty(selectedJob)}
                 filters={filters}
-                filtersConfig={tabData[selectedTab].filtersConfig}
+                filtersConfig={initialTabData[selectedTab].filtersConfig}
                 handleRefresh={tabData[selectedTab].handleRefresh}
+                handleAutoRefreshPrevValueChange={setAutoRefreshPrevValue}
                 hidden={Boolean(params.workflowId)}
                 key={selectedTab}
                 page={JOBS_MONITORING_PAGE}
                 setSearchParams={setSearchParams}
                 tab={selectedTab}
+                withAutoRefresh
+                withInternalAutoRefresh={params.jobName}
                 withRefreshButton
                 withoutExpandButton
               >
@@ -259,6 +268,7 @@ const Jobs = () => {
                   getWorkflows,
                   handleMonitoring,
                   handleRerunJob,
+                  autoRefreshPrevValue,
                   jobRuns,
                   jobWizardIsOpened,
                   jobWizardMode,
@@ -289,10 +299,8 @@ const Jobs = () => {
               >
                 <Outlet />
               </JobsContext.Provider>
-              {(jobsStore.loading ||
-                workflowsStore.workflows.loading ||
+              {(Boolean(jobsStore.jobLoadingCounter) ||
                 workflowsStore.activeWorkflow.loading ||
-                functionsStore.loading ||
                 functionsStore.funcLoading) && <Loader />}
             </div>
           </div>

@@ -29,19 +29,17 @@ import {
   BE_PAGE_SIZE,
   FILTER_ALL_ITEMS,
   GROUP_BY_WORKFLOW,
-  JOB_KIND_LOCAL,
   JOBS_MONITORING_JOBS_TAB,
   MONITOR_JOBS_TAB,
   SCHEDULE_TAB
 } from '../constants'
-import { getJobKindFromLabels } from '../utils/jobs.util'
 import { usePagination } from './usePagination.hook'
 import { parseJob } from '../utils/parseJob'
 import { fetchAllJobRuns, fetchJobs, fetchScheduledJobs } from '../reducers/jobReducer'
 import { fetchWorkflows } from '../reducers/workflowReducer'
 import { useFiltersFromSearchParams } from './useFiltersFromSearchParams.hook'
 
-export const useJobsPageData = (setSelectedJob, initialTabData, selectedTab) => {
+export const useJobsPageData = (initialTabData, selectedTab) => {
   const [jobRuns, setJobRuns] = useState([])
   const [editableItem, setEditableItem] = useState(null)
   const [jobWizardMode, setJobWizardMode] = useState(null)
@@ -112,18 +110,7 @@ export const useJobsPageData = (setSelectedJob, initialTabData, selectedTab) => 
         .unwrap()
         .then(response => {
           if (response?.runs) {
-            const parsedJobs = response.runs
-              .map(job => parseJob(job))
-              .filter(job => {
-                const type = getJobKindFromLabels(job.labels) ?? JOB_KIND_LOCAL
-
-                return (
-                  (!filters.type ||
-                    filters.type === FILTER_ALL_ITEMS ||
-                    filters.type.split(',').includes(type)) &&
-                  (!filters.project || job.project.includes(filters.project.toLowerCase()))
-                )
-              })
+            const parsedJobs = response.runs.map(job => parseJob(job))
             const responseAbortingJobs = parsedJobs.reduce((acc, job) => {
               if (job.state.value === 'aborting' && job.abortTaskId) {
                 acc[job.abortTaskId] = {
@@ -236,8 +223,8 @@ export const useJobsPageData = (setSelectedJob, initialTabData, selectedTab) => 
   )
 
   const handleMonitoring = useCallback(
-    item => {
-      monitorJob(appStore.frontendSpec.jobs_dashboard_url, item, params.projectName)
+    (item, isProject) => {
+      monitorJob(appStore.frontendSpec.jobs_dashboard_url, item, params.projectName, isProject)
     },
     [appStore.frontendSpec.jobs_dashboard_url, params.projectName]
   )

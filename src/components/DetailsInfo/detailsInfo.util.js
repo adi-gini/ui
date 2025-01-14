@@ -17,7 +17,8 @@ illegal under applicable law, and the grant of the foregoing license
 under the Apache 2.0 license is conditioned upon your compliance with
 such restriction.
 */
-import { capitalize, isNil, isNumber } from 'lodash'
+import { capitalize, isNil, isNumber, upperFirst } from 'lodash'
+import classNames from 'classnames'
 
 import DetailsInfoItem from '../../elements/DetailsInfoItem/DetailsInfoItem'
 
@@ -34,13 +35,32 @@ import {
   MLRUN_STORAGE_INPUT_PATH_SCHEME
 } from '../../constants'
 import { formatDatetime, parseKeyValues, parseUri } from '../../utils'
+import { getTriggerCriticalTimePeriod } from '../../utils/createAlertsContent'
 import { getChipOptions } from '../../utils/getChipOptions'
 import { getLimitsGpuType } from '../../elements/FormResourcesUnits/formResourcesUnits.util'
 import { isEveryObjectValueEmpty } from '../../utils/isEveryObjectValueEmpty'
 import { roundFloats } from '../../utils/roundFloats'
 import { generateFunctionPriorityLabel } from '../../utils/generateFunctionPriorityLabel'
 import { openPopUp } from 'igz-controls/utils/common.util'
-import { TextTooltipTemplate, Tooltip } from 'iguazio.dashboard-react-controls/dist/components'
+
+export const generateTriggerInfoContent = criteria => {
+  if (criteria) {
+    return [
+      {
+        label: 'Trigger criteria count',
+        id: 'triggerCriteriaCount',
+        value: criteria?.count || 'N/A'
+      },
+      {
+        label: 'Trigger criteria time period',
+        id: 'triggerCriteriaTimePeriod',
+        value: getTriggerCriticalTimePeriod(criteria?.period)
+      }
+    ]
+  }
+
+  return []
+}
 
 export const generateArtifactsInfoContent = (page, pageTab, selectedItem) => {
   if (pageTab === MODEL_ENDPOINTS_TAB) {
@@ -57,7 +77,7 @@ export const generateArtifactsInfoContent = (page, pageTab, selectedItem) => {
       selectedItem.target_path,
       selectedItem.tree,
       formatDatetime(selectedItem.updated, 'N/A'),
-      page === MODELS_PAGE ? selectedItem.framework ?? '' : null,
+      page === MODELS_PAGE ? (selectedItem.framework ?? '') : null,
       selectedItem.labels ?? [],
       selectedItem.sources
     ].filter(content => !isNil(content))
@@ -198,29 +218,38 @@ export const generateDriftDetailsInfo = modelEndpoint => {
     : []
 }
 
-export const generateAlertsDetailsInfo = pageData => {
-  if (pageData.page === ALERTS_PAGE) {
-    const triggerCriteria = pageData?.details?.triggerCriteria
-    const notifications = pageData?.selectedAlert?.notifications
+export const generateAlertsDetailsInfo = selectedItem => {
+  if (selectedItem.page === ALERTS_PAGE) {
+    const triggerCriteriaContent = generateTriggerInfoContent(selectedItem?.criteria)
     const AlertsDetailsInfo = {
       notificationsDetailsInfo: [],
       triggerCriteriaDetailsInfo: []
     }
-    AlertsDetailsInfo.notificationsDetailsInfo = notifications.map((valueItem, index) => (
-      <Tooltip
-        key={valueItem.tooltip + index}
-        template={<TextTooltipTemplate text={valueItem.tooltip} />}
-      >
-        {valueItem.icon}
-      </Tooltip>
+    const notifications = selectedItem?.notifications
+    AlertsDetailsInfo.notificationsDetailsInfo = notifications.map((notification, index) => (
+      <li className="notifications-item" key={index}>
+        <div className="notifications-item_icon">{notification.icon}</div>
+        <div>
+          <div className="notifications-item__header">{upperFirst(notification.kind)}</div>
+          <div className="notifications-item__header-text">
+            {`${notification.succeeded} success `}
+            <span
+              className={classNames(
+                'notifications-item__header-text_failed',
+                notification.failed > 0 && 'notifications-item__header-text_success'
+              )}
+            >
+              {`${notification.failed} failed`}
+            </span>
+          </div>
+        </div>
+      </li>
     ))
 
-    AlertsDetailsInfo.triggerCriteriaDetailsInfo = triggerCriteria.map(trigger => {
+    AlertsDetailsInfo.triggerCriteriaDetailsInfo = triggerCriteriaContent.map(trigger => {
       return (
         <li className="details-item" key={trigger.id}>
-          <div className="details-item__header details-item__header_max-content-width">
-            {trigger.label}:
-          </div>
+          <div className="details-item__header">{trigger.label}:</div>
           <DetailsInfoItem info={trigger.value} />
         </li>
       )

@@ -31,7 +31,9 @@ import {
   ITERATIONS_FILTER,
   LABELS_FILTER,
   NAME_FILTER,
+  SHOW_ITERATIONS,
   TAG_FILTER,
+  TAG_FILTER_ALL_ITEMS,
   TAG_FILTER_LATEST,
   VIEW_SEARCH_PARAMETER
 } from '../../constants'
@@ -60,14 +62,17 @@ import { ReactComponent as DownloadIcon } from 'igz-controls/images/download.svg
 import { ReactComponent as HistoryIcon } from 'igz-controls/images/history.svg'
 
 export const getFiltersConfig = isAllVersions => ({
-  [NAME_FILTER]: { label: 'Name:', initialValue: '' },
-  [TAG_FILTER]: { label: 'Version tag:', initialValue: TAG_FILTER_LATEST, isModal: true },
+  [NAME_FILTER]: { label: 'Name:', initialValue: '', hidden: isAllVersions },
+  [TAG_FILTER]: {
+    label: 'Version tag:',
+    initialValue: isAllVersions ? TAG_FILTER_ALL_ITEMS : TAG_FILTER_LATEST,
+    isModal: true
+  },
   [LABELS_FILTER]: { label: 'Labels:', initialValue: '', isModal: true },
   [ITERATIONS_FILTER]: {
     label: 'Show best iteration only:',
-    initialValue: '',
-    isModal: true,
-    hidden: !isAllVersions
+    initialValue: isAllVersions ? '' : SHOW_ITERATIONS,
+    isModal: true
   }
 })
 

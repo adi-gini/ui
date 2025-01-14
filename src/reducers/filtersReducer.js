@@ -23,6 +23,7 @@ import { set } from 'lodash'
 import {
   ARTIFACT_OTHER_TYPE,
   DATASET_TYPE,
+  DOCUMENT_TYPE,
   FILTER_MENU_MODAL,
   GROUP_BY_NAME,
   MODEL_TYPE,
@@ -32,7 +33,7 @@ import {
 const initialState = {
   groupBy: GROUP_BY_NAME,
   iter: SHOW_ITERATIONS,
-
+  autoRefresh: false,
   tagOptions: null,
   projectOptions: [],
   [FILTER_MENU_MODAL]: {}
@@ -47,7 +48,7 @@ export const getFilterTagOptions = createAsyncThunk(
       config
     }
     const fetchTagsPromise =
-      [ARTIFACT_OTHER_TYPE, MODEL_TYPE, DATASET_TYPE].includes(category) && dispatch
+      [ARTIFACT_OTHER_TYPE, MODEL_TYPE, DATASET_TYPE, DOCUMENT_TYPE].includes(category) && dispatch
         ? dispatch(fetchTags(fetchTagsArguments)).unwrap()
         : fetchTags(fetchTagsArguments)
 
@@ -98,6 +99,9 @@ const filtersSlice = createSlice({
     },
     setFilterProjectOptions(state, action) {
       state.projectOptions = action.payload
+    },
+    toggleAutoRefresh(state, action) {
+      state.autoRefresh = action.payload
     }
   },
   extraReducers: builder => {
@@ -115,7 +119,8 @@ export const {
   setFiltersValues,
   setModalFiltersValues,
   setModalFiltersInitialValues,
-  setFilterProjectOptions
+  setFilterProjectOptions,
+  toggleAutoRefresh
 } = filtersSlice.actions
 
 export default filtersSlice.reducer

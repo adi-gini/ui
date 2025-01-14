@@ -45,7 +45,12 @@ import './pagination.scss'
 
 const threeDotsString = '...'
 
-const Pagination = ({ closeParamName = '', paginationConfig }) => {
+const Pagination = ({
+  closeParamName = '',
+  disableNextDoubleBtn = false,
+  disabledNextDoubleBtnTooltip = '',
+  paginationConfig
+}) => {
   const [, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
   const paginationPagesRef = useRef()
@@ -63,11 +68,12 @@ const Pagination = ({ closeParamName = '', paginationConfig }) => {
       prevBtn: paginationConfig[FE_PAGE] === 1,
       prevDoubleBtn: paginationConfig[BE_PAGE] === 1,
       nextBtn:
-        paginationConfig[FE_PAGE] === paginationConfig[FE_PAGE_END] &&
-        !paginationConfig.paginationResponse?.['page-token'],
-      nextDoubleBtn: !paginationConfig.paginationResponse?.['page-token']
+        (paginationConfig[FE_PAGE] === paginationConfig[FE_PAGE_END] && disableNextDoubleBtn) ||
+        (paginationConfig[FE_PAGE] === paginationConfig[FE_PAGE_END] &&
+          !paginationConfig.paginationResponse?.['page-token']),
+      nextDoubleBtn: disableNextDoubleBtn || !paginationConfig.paginationResponse?.['page-token']
     }
-  }, [paginationConfig])
+  }, [disableNextDoubleBtn, paginationConfig])
 
   const prevDoubleBtnTooltip = useMemo(() => {
     const visiblePagesCount = paginationConfig[BE_PAGE_SIZE] / paginationConfig[FE_PAGE_SIZE]
@@ -80,7 +86,7 @@ const Pagination = ({ closeParamName = '', paginationConfig }) => {
     if (closeParamName) {
       navigate(getCloseDetailsLink(closeParamName, true), { replace: true })
     }
-  }, [navigate, closeParamName])
+  }, [closeParamName, navigate])
 
   const paginationItems = useMemo(() => {
     if (!paginationConfig[FE_PAGE]) return []
@@ -194,7 +200,7 @@ const Pagination = ({ closeParamName = '', paginationConfig }) => {
     }
   }
 
-  const getPageNumberStyle = useCallback((paginationItems, paginationItem, index) => {
+  const getPageNumberStyle = useCallback(paginationItems => {
     const maxPage = max(paginationItems)
     const paginationItemWidth = `${maxPage.toString().length}ch`
 
@@ -202,7 +208,7 @@ const Pagination = ({ closeParamName = '', paginationConfig }) => {
   }, [])
 
   const getPaginationPagesStyle = useCallback(
-    (paginationItems, paginationItem, index) => {
+    paginationItems => {
       const maxFePages = paginationConfig[BE_PAGE_SIZE] / paginationConfig[FE_PAGE_SIZE]
       const maxPage = max(paginationItems)
       const maxPageCount = min([7, maxPage, maxFePages])
@@ -255,7 +261,9 @@ const Pagination = ({ closeParamName = '', paginationConfig }) => {
                           ? 'pagination-dots'
                           : `pagination-page-${pageItem}`
                       }
-                      onClick={() => goToPage(pageItem)}
+                      onClick={
+                        pageItem !== paginationConfig[FE_PAGE] ? () => goToPage(pageItem) : null
+                      }
                       className={classnames(
                         'pagination-btn',
                         pageItem !== threeDotsString && 'pagination-page-btn',
@@ -289,9 +297,11 @@ const Pagination = ({ closeParamName = '', paginationConfig }) => {
               className="pagination-navigate-btn"
               onClick={() => goToNextBePage()}
               tooltipText={
-                !navigationDisableState.nextDoubleBtn
-                  ? `Load page ${paginationConfig[FE_PAGE_END] + 1}+`
-                  : ''
+                navigationDisableState.nextDoubleBtn && disabledNextDoubleBtnTooltip
+                  ? disabledNextDoubleBtnTooltip
+                  : !navigationDisableState.nextDoubleBtn
+                    ? `Load page ${paginationConfig[FE_PAGE_END] + 1}+`
+                    : ''
               }
               disabled={navigationDisableState.nextDoubleBtn}
             >
@@ -307,6 +317,8 @@ const Pagination = ({ closeParamName = '', paginationConfig }) => {
 
 Pagination.propTypes = {
   closeParamName: PropTypes.string,
+  disableNextDoubleBtn: PropTypes.bool,
+  disabledNextDoubleBtnTooltip: PropTypes.string,
   paginationConfig: PAGINATION_CONFIG.isRequired
 }
 

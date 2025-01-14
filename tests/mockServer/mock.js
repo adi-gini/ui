@@ -379,12 +379,7 @@ function filterByLabels(elementLabels, requestLabels) {
   return false
 }
 
-function getPartitionedData(
-  listOfItems,
-  pathToPartition,
-  pathToUpdated,
-  defaultPathToPartition
-) {
+function getPartitionedData(listOfItems, pathToPartition, pathToUpdated, defaultPathToPartition) {
   return chain(listOfItems)
     .groupBy(arrayItem => get(arrayItem, pathToPartition, defaultPathToPartition))
     .map(group => maxBy(group, groupItem => new Date(get(groupItem, pathToUpdated))))
@@ -441,10 +436,12 @@ function getFeatureSet(req, res) {
 
   if (req.query['format'] === 'minimal') {
     collectedFeatureSets = collectedFeatureSets.map(featureSet => {
-      const metadataFields = ['description', 'name', 'project', 'tag', 'uid', 'labels'].map(
+      const metadataFields = ['name', 'project', 'tag', 'uid', 'labels'].map(
         fieldName => `metadata.${fieldName}`
       )
-      const specFields = ['entities', 'targets', 'engine'].map(fieldName => `spec.${fieldName}`)
+      const specFields = ['description', 'entities', 'targets', 'engine'].map(
+        fieldName => `spec.${fieldName}`
+      )
 
       return pick(featureSet, ['kind', ...metadataFields, 'status.state', ...specFields])
     })
@@ -884,11 +881,52 @@ function getRun(req, res) {
 
 function getAlerts(req, res) {
   // TODO:ML-8514 Update getAlerts to support both parameters and query strings.
-  const collectedAlerts = alerts.activations
+  let collectedAlerts = alerts.activations
 
   const [paginatedAlerts, pagination] = getPaginationConfig(collectedAlerts, req.query)
 
-  res.send({ activations: paginatedAlerts, pagination })
+  if (req.query['name']) {
+    collectedAlerts = collectedAlerts.filter(schedule =>
+      schedule.name.includes(req.query['name'].slice(1))
+    )
+  }
+  if (req.query['severity']) {
+    collectedAlerts = collectedAlerts.filter(schedule =>
+      schedule.severity.includes(req.query['severity'])
+    )
+  }
+  if (req.query['entity-kind']) {
+    collectedAlerts = collectedAlerts.filter(schedule =>
+      schedule.entity_kind.includes(req.query['entity-kind'])
+    )
+  }
+  if (req.query['event-kind']) {
+    collectedAlerts = collectedAlerts.filter(schedule =>
+      schedule.event_kind.includes(req.query['event-kind'])
+    )
+  }
+
+  if (req.query['entity']) {
+    collectedAlerts = collectedAlerts.filter(schedule =>
+      schedule.name.includes(req.query['name'].slice(1))
+    )
+  }
+
+  if (req.query['since']) {
+    const sinceTime = new Date(req.query['since']).getTime()
+    collectedAlerts = collectedAlerts.filter(
+      alert => new Date(alert.activation_time).getTime() >= sinceTime
+    )
+  }
+
+  if (req.query['until']) {
+    const untilTime = new Date(req.query['until']).getTime()
+    collectedAlerts = collectedAlerts.filter(
+      alert => new Date(alert.activation_time).getTime() <= untilTime
+    )
+  }
+
+  res.send({ activations: collectedAlerts, paginatedAlerts, pagination })
 }
 
 function patchRun(req, res) {
@@ -1254,6 +1292,7 @@ function getProjectsArtifactTags(req, res) {
 function getArtifacts(req, res) {
   const categories = {
     dataset: ['dataset'],
+    document: ['document'],
     model: ['model'],
     other: ['', 'table', 'link', 'plot', 'chart', 'plotly', 'artifact']
   }
@@ -1332,6 +1371,12 @@ function getArtifacts(req, res) {
       'db_key'
     )
   }
+
+  collectedArtifacts = collectedArtifacts.sort((prevArtifact, nextArtifact) => {
+    const datePrevArtifact = new Date(prevArtifact.metadata.updated)
+    const dateNextArtifact = new Date(nextArtifact.metadata.updated)
+    return dateNextArtifact - datePrevArtifact
+  })
 
   const [paginatedArtifacts, pagination] = getPaginationConfig(collectedArtifacts, req.query)
 
