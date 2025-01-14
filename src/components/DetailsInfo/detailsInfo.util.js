@@ -35,6 +35,7 @@ import {
   MLRUN_STORAGE_INPUT_PATH_SCHEME
 } from '../../constants'
 import { formatDatetime, parseKeyValues, parseUri } from '../../utils'
+import { getTriggerCriticalTimePeriod } from '../../utils/createAlertsContent'
 import { getChipOptions } from '../../utils/getChipOptions'
 import { getLimitsGpuType } from '../../elements/FormResourcesUnits/formResourcesUnits.util'
 import { isEveryObjectValueEmpty } from '../../utils/isEveryObjectValueEmpty'
@@ -53,15 +54,13 @@ export const generateTriggerInfoContent = criteria => {
       {
         label: 'Trigger criteria time period',
         id: 'triggerCriteriaTimePeriod',
-        value: criteria?.period || 'N/A'
+        value: getTriggerCriticalTimePeriod(criteria?.period)
       }
     ]
   }
 
   return []
 }
-
-export const notifications = [{ label: 'Notifications', id: 'notifications' }]
 
 export const generateArtifactsInfoContent = (page, pageTab, selectedItem) => {
   if (pageTab === MODEL_ENDPOINTS_TAB) {
