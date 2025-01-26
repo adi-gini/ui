@@ -96,8 +96,8 @@ const Alerts = () => {
   )
 
   const pageData = useMemo(
-    () => generatePageData(selectedAlert, handleFetchJobLogs),
-    [handleFetchJobLogs, selectedAlert]
+    () => generatePageData(isCrossProjects, selectedAlert, handleFetchJobLogs),
+    [isCrossProjects, handleFetchJobLogs, selectedAlert]
   )
 
   useEffect(() => {
