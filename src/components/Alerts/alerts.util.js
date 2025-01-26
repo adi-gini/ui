@@ -98,8 +98,8 @@ export const generatePageData = (isCrossProjects, selectedAlert, handleFetchJobL
     page: ALERTS_PAGE,
     details: {
       type: ALERTS_PAGE,
-      entityType: selectedAlert.entity_kind,
-      infoHeaders: alertsHeaders(selectedAlert.entity_kind, isCrossProjects),
+      entityType: selectedAlert?.entity_kind,
+      infoHeaders: alertsHeaders(selectedAlert?.entity_kind, isCrossProjects),
       menu: [],
       refreshLogs: handleFetchJobLogs,
       removeLogs: () => {}
