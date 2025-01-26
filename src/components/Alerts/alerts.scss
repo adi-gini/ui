@@ -9,3 +9,11 @@
     padding: 0;
   }
 }
+
+.item-info{
+  &:has(.metrics-wrapper),
+  &:has(.table__item-logs-container),
+  &:has(> .item-info__details-metrics) {
+    align-content: flex-start;
+  }
+}
