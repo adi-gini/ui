@@ -40,7 +40,7 @@ const ProjectStatisticsCounter = ({ counterObject }) => {
           <Loader section small secondary />
         ) : (
           <>
-            {counterObject.value}
+            <span className="data-ellipsis">{counterObject.value}</span>
             <Arrow className="project-data-card__statistics-arrow" />
           </>
         )}
