@@ -65,7 +65,11 @@ const getEntityTypeData = entityType => {
       }
     case MODEL_MONITORING_APPLICATION:
       return {
-        value: <Application />,
+        value: (
+          <div data-testid={entityType}>
+            <Application />
+          </div>
+        ),
         detailsValue: (
           <div className="alert-row__details-alert-icon-cell">
             <Application /> <span>{upperFirst(APPLICATION)}</span>
@@ -75,7 +79,11 @@ const getEntityTypeData = entityType => {
       }
     case JOB:
       return {
-        value: <Job />,
+        value: (
+          <div data-testid={entityType}>
+            <Job />
+          </div>
+        ),
         detailsValue: (
           <div className="alert-row__details-alert-icon-cell">
             <Job /> <span>{upperFirst(upperFirst(JOB))}</span>
