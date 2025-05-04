@@ -199,8 +199,8 @@ const TabsSlider = ({
                     data-tab={tab.id}
                     onClick={() => onSelectTab(tab)}
                   >
-                    {tab.icon && <div>{tab.icon}</div>}
-                    {tab.label}
+                    {tab.icon && <>{tab.icon}</>}
+                    {tab.label ?? tab.id}
                     {tab.tip && <Tip text={tab.tip} />}
                   </span>
                 </Link>
