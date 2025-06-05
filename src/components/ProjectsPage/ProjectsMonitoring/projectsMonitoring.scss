@@ -1,4 +1,4 @@
-@import '~igz-controls/scss/colors';
+@use 'igz-controls/scss/colors';
 
 .projects-monitoring {
   &-container {
@@ -11,11 +11,12 @@
 
   &-stats {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
     gap: 15px;
+    grid-template-columns: repeat(5, 1fr);
 
-    @media screen and (min-width: 1400px) {
-      grid-template-columns: 4fr 4fr 3.5fr 4fr;
+    @container (max-width: 950px) {
+      grid-template-columns:  repeat(6, 1fr);
+      gap: 10px;
     }
   }
 

@@ -112,6 +112,7 @@ const initialState = {
     }
   },
   projectTotalAlerts: {},
+  projectTotalModels: 0,
   projects: [],
   projectsNames: {
     error: null,
@@ -149,7 +150,7 @@ export const createNewProject = createAsyncThunk('createNewProject', ({ postData
         error.response?.status === CONFLICT_ERROR_STATUS_CODE
           ? `A project named "${postData.metadata.name}" already exists.`
           : error.response?.status === FORBIDDEN_ERROR_STATUS_CODE
-            ? 'You don’t have permission to create a project.'
+            ? 'Permission denied: Unable to create a project. Contact your system administrator to review user policy and data access permissions.'
             : error.response?.status === INTERNAL_SERVER_ERROR_STATUS_CODE
               ? error.response.data?.detail ||
                 'The system already has the maximum number of projects. An existing project must be deleted before you can create another.'
@@ -187,7 +188,7 @@ export const fetchProject = createAsyncThunk(
 )
 export const fetchProjectDataSets = createAsyncThunk(
   'fetchProjectDataSets',
-  ({ project, params, signal }, thunkAPI) => {
+  ({ project }, thunkAPI) => {
     return projectsApi
       .getProjectDataSets(project)
       .then(response => {
@@ -356,6 +357,9 @@ const projectStoreSlice = createSlice({
         loading: false,
         data: []
       }
+    },
+    setProjectTotalModels(state, action) {
+      state.projectTotalModels = action.payload
     },
     removeProjects(state) {
       state.projects = []
@@ -576,7 +580,8 @@ export const {
   setMlrunIsUnhealthy,
   setMlrunUnhealthyRetrying,
   setJobsMonitoringData,
-  setProjectTotalAlerts
+  setProjectTotalAlerts,
+  setProjectTotalModels
 } = projectStoreSlice.actions
 
 export default projectStoreSlice.reducer

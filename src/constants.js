@@ -109,7 +109,7 @@ export const SEVERITY_HIGH = 'high'
 export const SEVERITY_CRITICAL = 'critical'
 export const ALERTS_DISPLAY_LIMIT = 100
 
-export const MODELS_PAGE = 'MODELS'
+export const MODELS_PAGE = 'models'
 export const MODELS_TAB = 'models'
 export const MODEL_ENDPOINTS_TAB = 'model-endpoints'
 export const REAL_TIME_PIPELINES_TAB = 'real-time-pipelines'
@@ -122,18 +122,19 @@ export const FEATURE_SETS_TAB = 'feature-sets'
 export const FEATURE_VECTORS_TAB = 'feature-vectors'
 export const ADD_TO_FEATURE_VECTOR_TAB = 'add-to-feature-vector'
 
-export const DATASETS_PAGE = 'DATASETS'
-export const DATASETS_TAB = 'datasets'
+export const DATASETS_PAGE = 'datasets'
 
 export const FUNCTIONS_PAGE = 'FUNCTIONS'
 export const FUNCTIONS_PAGE_PATH = 'functions'
-export const ARTIFACTS_PAGE = 'ARTIFACTS'
+export const ARTIFACTS_PAGE = 'artifacts'
 
-export const FILES_PAGE = 'FILES'
-export const FILES_TAB = 'files'
+export const FILES_PAGE = 'files'
 
-export const DOCUMENTS_PAGE = 'DOCUMENTS'
-export const DOCUMENTS_TAB = 'documents'
+export const MONITORING_APP_PAGE = 'monitoring-app'
+
+export const DOCUMENTS_PAGE = 'documents'
+
+export const LLM_PROMPTS_PAGE = 'llm-prompts'
 
 export const PROJECT_MONITOR = 'monitor'
 
@@ -342,27 +343,6 @@ export const SET_ITERATION_OPTIONS = 'SET_ITERATION_OPTIONS'
 export const SET_SELECTED_METRICS_OPTIONS = 'SET_SELECTED_METRICS_OPTIONS'
 export const SHOW_WARNING = 'SHOW_WARNING'
 
-/*=========== NUCLIO =============*/
-
-export const FETCH_API_GATEWAYS_BEGIN = 'FETCH_API_GATEWAYS_BEGIN'
-export const FETCH_API_GATEWAYS_FAILURE = 'FETCH_API_GATEWAYS_FAILURE'
-export const FETCH_API_GATEWAYS_SUCCESS = 'FETCH_API_GATEWAYS_SUCCESS'
-export const FETCH_NUCLIO_V3IO_STREAM_SHARD_LAGS_BEGIN = 'FETCH_NUCLIO_V3IO_STREAM_SHARD_LAGS_BEGIN'
-export const FETCH_NUCLIO_V3IO_STREAM_SHARD_LAGS_FAILURE =
-  'FETCH_NUCLIO_V3IO_STREAM_SHARD_LAGS_FAILURE'
-export const FETCH_NUCLIO_V3IO_STREAM_SHARD_LAGS_SUCCESS =
-  'FETCH_NUCLIO_V3IO_STREAM_SHARD_LAGS_SUCCESS'
-export const FETCH_NUCLIO_V3IO_STREAMS_BEGIN = 'FETCH_NUCLIO_V3IO_STREAMS_BEGIN'
-export const FETCH_NUCLIO_V3IO_STREAMS_FAILURE = 'FETCH_NUCLIO_V3IO_STREAMS_FAILURE'
-export const FETCH_NUCLIO_V3IO_STREAMS_SUCCESS = 'FETCH_NUCLIO_V3IO_STREAMS_SUCCESS'
-export const FETCH_NUCLIO_FUNCTIONS_BEGIN = 'FETCH_NUCLIO_FUNCTIONS_BEGIN'
-export const FETCH_NUCLIO_FUNCTIONS_FAILURE = 'FETCH_NUCLIO_FUNCTIONS_FAILURE'
-export const FETCH_NUCLIO_FUNCTIONS_SUCCESS = 'FETCH_NUCLIO_FUNCTIONS_SUCCESS'
-export const FETCH_ALL_NUCLIO_FUNCTIONS_SUCCESS = 'FETCH_ALL_NUCLIO_FUNCTIONS_SUCCESS'
-export const REMOVE_V3IO_STREAMS = 'REMOVE_V3IO_STREAMS'
-export const RESET_V3IO_STREAMS_ERROR = 'RESET_V3IO_STREAMS_ERROR'
-export const RESET_V3IO_STREAM_SHARD_LAG_ERROR = 'RESET_V3IO_STREAM_SHARD_LAG_ERROR'
-
 /*=========== KEY CODES =============*/
 
 export const KEY_CODES = {
@@ -480,6 +460,7 @@ export const DATASET_TYPE = 'dataset'
 export const DOCUMENT_TYPE = 'document'
 export const MODEL_TYPE = 'model'
 export const ARTIFACT_OTHER_TYPE = 'other'
+export const LLM_PROMPT_TYPE = 'llm-prompt'
 
 /*=========== ROLES =============*/
 
@@ -516,3 +497,7 @@ export const EMPTY_OBJECT = {}
 /*========= PROTOCOLS =============*/
 export const HTTP = 'http://'
 export const HTTPS = 'https://'
+
+/*========= METRICS TYPES =============*/
+export const METRIC_TYPE = 'metric'
+export const RESULT_TYPE = 'result'

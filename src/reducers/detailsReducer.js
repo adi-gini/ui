@@ -41,6 +41,12 @@ const initialState = {
     isPredefined: false
   },
   detailsPopUpInfoContent: {},
+  detailsJobPods: {
+    loading: true,
+    podsList: [],
+    podsPending: [],
+    podsTooltip: []
+  },
   editMode: false,
   error: null,
   infoContent: {},
@@ -71,6 +77,18 @@ export const fetchModelFeatureVector = createAsyncThunk(
       .getModelFeatureVector(project, name, reference)
       .then(response => {
         return response.data.status
+      })
+      .catch(error => thunkAPI.rejectWithValue(error))
+  }
+)
+
+export const fetchDetailsJobPods = createAsyncThunk(
+  'fetchDetailsJobPods',
+  ({ project, uid, kind }, thunkAPI) => {
+    return detailsApi
+      .getJobPods(project, uid, kind)
+      .then(({ data }) => {
+        return generatePods(project, uid, data)
       })
       .catch(error => thunkAPI.rejectWithValue(error))
   }
@@ -138,6 +156,9 @@ const detailsStoreSlice = createSlice({
   name: 'detailsStore',
   initialState,
   reducers: {
+    removeDetailsPods(state) {
+      state.detailsJobPods = initialState.detailsJobPods
+    },
     removeDetailsPopUpInfoContent(state) {
       state.detailsPopUpInfoContent = {}
     },
@@ -211,6 +232,17 @@ const detailsStoreSlice = createSlice({
       state.modelFeatureVectorData = { ...initialState.modelFeatureVectorData }
       state.error = action.payload
     })
+    builder.addCase(fetchDetailsJobPods.pending, state => {
+      state.detailsJobPods.loading = true
+    })
+    builder.addCase(fetchDetailsJobPods.fulfilled, (state, action) => {
+      state.detailsJobPods = { ...action.payload, loading: false }
+      state.error = null
+    })
+    builder.addCase(fetchDetailsJobPods.rejected, (state, action) => {
+      state.detailsJobPods.loading = false
+      state.error = action.payload
+    })
     builder.addCase(fetchJobPods.pending, state => {
       state.pods.loading = true
     })
@@ -262,7 +294,7 @@ const detailsStoreSlice = createSlice({
     builder.addCase(fetchModelEndpointMetricsValues.pending, state => {
       state.loadingCounter = state.loadingCounter + 1
     })
-    builder.addCase(fetchModelEndpointMetricsValues.fulfilled, (state, action) => {
+    builder.addCase(fetchModelEndpointMetricsValues.fulfilled, state => {
       state.loadingCounter = state.loadingCounter - 1
       state.error = null
     })
@@ -274,6 +306,7 @@ const detailsStoreSlice = createSlice({
 })
 
 export const {
+  removeDetailsPods,
   removeDetailsPopUpInfoContent,
   removeInfoContent,
   removeModelFeatureVector,

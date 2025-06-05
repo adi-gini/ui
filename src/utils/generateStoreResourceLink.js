@@ -18,9 +18,10 @@ under the Apache 2.0 license is conditioned upon your compliance with
 such restriction.
 */
 import {
-  DATASETS_TAB,
+  DATASETS_PAGE,
+  DOCUMENTS_PAGE,
   FEATURE_VECTORS_TAB,
-  FILES_TAB,
+  FILES_PAGE,
   MODELS_TAB,
   TAG_FILTER_LATEST
 } from '../constants'
@@ -28,23 +29,26 @@ import {
 export const generateStoreResourceLink = (resource, projectName) => {
   const input = { ...resource }
 
-  if ([MODELS_TAB, DATASETS_TAB].includes(input.kind)) {
+  if ([MODELS_TAB, DATASETS_PAGE].includes(input.kind)) {
     input.kind = input.kind.slice(0, -1)
   } else if (FEATURE_VECTORS_TAB === input.kind) {
     input.kind = 'FeatureVector'
   }
 
   const inputsLinks = {
-    model: `${process.env.PUBLIC_URL}/projects/${projectName}/models/${MODELS_TAB}/${
+    model: `${import.meta.env.VITE_PUBLIC_URL}/projects/${projectName}/models/${MODELS_TAB}/${
       input.db_key || input.key
     }/${input.tag ?? input.tree ?? TAG_FILTER_LATEST}${input.iter ? `/${input.iter}` : ''}/overview`,
-    dataset: `${process.env.PUBLIC_URL}/projects/${projectName}/${DATASETS_TAB}/${
+    dataset: `${import.meta.env.VITE_PUBLIC_URL}/projects/${projectName}/${DATASETS_PAGE}/${
       input.db_key || input.key
     }/${input.tag ?? input.tree ?? TAG_FILTER_LATEST}${input.iter ? `/${input.iter}` : ''}/overview`,
-    files: `${process.env.PUBLIC_URL}/projects/${projectName}/${FILES_TAB}/${input.db_key || input.key}/${input.tag ?? input.tree ?? TAG_FILTER_LATEST}${
+    document: `${import.meta.env.VITE_PUBLIC_URL}/projects/${projectName}/${DOCUMENTS_PAGE}/${
+      input.db_key || input.key
+    }/${input.tag ?? input.tree ?? TAG_FILTER_LATEST}${input.iter ? `/${input.iter}` : ''}/overview`,
+    files: `${import.meta.env.VITE_PUBLIC_URL}/projects/${projectName}/${FILES_PAGE}/${input.db_key || input.key}/${input.tag ?? input.tree ?? TAG_FILTER_LATEST}${
       input.iter ? `/${input.iter}` : ''
     }/overview`,
-    FeatureVector: `${process.env.PUBLIC_URL}/projects/${projectName}/feature-store/${FEATURE_VECTORS_TAB}/${input.name ?? input.key}/${input.tag ?? input.uid ?? TAG_FILTER_LATEST}/overview`
+    FeatureVector: `${import.meta.env.VITE_PUBLIC_URL}/projects/${projectName}/feature-store/${FEATURE_VECTORS_TAB}/${input.name ?? input.key}/${input.tag ?? input.uid ?? TAG_FILTER_LATEST}/overview`
   }
 
   return input ? (inputsLinks[input.kind] ?? inputsLinks.files) : ''
