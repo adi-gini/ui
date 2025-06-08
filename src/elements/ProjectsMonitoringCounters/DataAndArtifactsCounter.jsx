@@ -28,6 +28,7 @@ const DataAndArtifactsCounter = () => {
   const { projectName: paramProjectName } = useParams()
   const loading = projectStore.projectsSummary.loading
 
+  console.log(projectStore)
   //domo mode!
   const totalDataAndArtifacts = paramProjectName
     ? projectStore.projectSummary.data?.dataAndArtifact_count || 0

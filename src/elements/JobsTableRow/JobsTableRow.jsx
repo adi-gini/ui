@@ -41,7 +41,6 @@ const JobsTableRow = ({ actionsMenu, handleSelectJob = () => {}, rowItem, select
   return (
     <tr className={rowClassNames}>
       {rowItem.content.map((rowItemProp, index) => {
-        console.log(actionsMenu, rowItem.data)
         return (
           !rowItemProp.hidden && (
             <TableCell

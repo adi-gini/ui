@@ -40,8 +40,6 @@ import { launchIDEOptions } from './project.utils'
 import RefreshIcon from 'igz-controls/images/refresh.svg?react'
 
 import './project.scss'
-import { PRIMARY_BUTTON } from '../../../../../../project/dashboard-react-controls/dist/constants'
-import PageActionsMenu from '../../common/PageActionsMenu/PageActionsMenu'
 
 const ProjectMonitorView = ({
   closeFeatureSetPanel,
