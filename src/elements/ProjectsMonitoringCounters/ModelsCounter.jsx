@@ -28,10 +28,10 @@ import classNames from 'classnames'
 
 const ModelsAndApplication = () => {
   const projectStore = useSelector(store => store.projectStore)
-  const { projectName: paramProjectName } = useParams()
+  const { projectName } = useParams()
   const navigate = useNavigate()
 
-  const modelsData = paramProjectName
+  const modelsData = projectName
     ? projectStore.projectSummary.data?.models_count || 0
     : projectStore.jobsMonitoringData?.models?.total || 0
 
@@ -41,11 +41,11 @@ const ModelsAndApplication = () => {
       <StatsCard.Row>
         <div
           className={classNames('stats__counter_header', {
-            stats__link: Boolean(paramProjectName)
+            stats__link: projectName
           })}
           data-testid="scheduled_total_counter"
           onClick={() => {
-            paramProjectName && navigate(`/projects/${paramProjectName}/models`)
+            projectName && navigate(`/projects/${projectName}/models`)
           }}
         >
           <div className="stats__counter">

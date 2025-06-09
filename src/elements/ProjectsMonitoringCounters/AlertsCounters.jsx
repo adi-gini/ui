@@ -34,8 +34,8 @@ import ClockIcon from 'igz-controls/images/clock.svg?react'
 import './projectsMonitoringCounters.scss'
 
 const AlertsCounters = () => {
-  const [showPopup, setShowPopup] = useState(false)
   const anchorRef = useRef(null)
+  const [showPopup, setShowPopup] = useState(false)
   const { projectName: paramProjectName } = useParams()
   const navigate = useNavigate()
   const projectStore = useSelector(store => store.projectStore)
@@ -99,7 +99,7 @@ const AlertsCounters = () => {
         <StatsCard.Header title="Alerts" icon={<Alerts />} iconClass="stats-card__title-icon">
           <div className="project-card__info stats__details">
             <ClockIcon className="project-card__info-icon" />
-            <span>Last 24 hrs</span>
+            {paramProjectName ? <span>24 hrs</span> : <span>Past 24 hrs</span>}
           </div>
         </StatsCard.Header>
         <StatsCard.Row>
@@ -176,7 +176,7 @@ const AlertsCounters = () => {
             headerIsHidden
             customPosition={{
               element: anchorRef,
-              position: 'bottom-right'
+              position: 'bottom-left'
             }}
           >
             <div className="card-popup_text">

@@ -297,13 +297,14 @@ export const generateMonitoringCounters = (data, dispatch) => {
       total: 0
     },
     artifacts: {
-      llm: 0,
-      dataset: 0,
-      artifacts: 0,
-      document: 0,
+      llm_prompts: 0,
+      datasets: 0,
+      files: 0,
+      documents: 0,
       total: 0
     }
   }
+
   data.forEach(project => {
     monitoringCounters.jobs.completed += project.runs_completed_recent_count || 0
     monitoringCounters.jobs.failed += project.runs_failed_recent_count || 0
@@ -337,15 +338,15 @@ export const generateMonitoringCounters = (data, dispatch) => {
 
     monitoringCounters.models.total += project.models_count || 0
 
-    monitoringCounters.artifacts.llm += project.llm_prompts_count || 0
-    monitoringCounters.artifacts.dataset += project.datasets_count || 0
-    monitoringCounters.artifacts.artifacts += project.files_count || 0
-    monitoringCounters.artifacts.document += project.documents_count || 0
+    monitoringCounters.artifacts.llm_prompts += project.llm_prompts_count || 0
+    monitoringCounters.artifacts.datasets += project.datasets_count || 0
+    monitoringCounters.artifacts.files += project.files_count || 0
+    monitoringCounters.artifacts.documents += project.documents_count || 0
     monitoringCounters.artifacts.total =
-      monitoringCounters.artifacts.llm +
-      monitoringCounters.artifacts.dataset +
-      monitoringCounters.artifacts.artifacts +
-      monitoringCounters.artifacts.document
+      monitoringCounters.artifacts.llm_prompts +
+      monitoringCounters.artifacts.datasets +
+      monitoringCounters.artifacts.files +
+      monitoringCounters.artifacts.documents
   })
 
   dispatch(setJobsMonitoringData(monitoringCounters))

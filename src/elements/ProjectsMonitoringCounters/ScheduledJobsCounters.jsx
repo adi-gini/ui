@@ -26,6 +26,7 @@ import Loader from '../../common/Loader/Loader'
 
 import { generateMonitoringStats } from '../../utils/generateMonitoringData'
 import { JOBS_MONITORING_SCHEDULED_TAB } from '../../constants'
+
 import { PopUpDialog } from 'igz-controls/components'
 import ClockIcon from 'igz-controls/images/clock.svg?react'
 
@@ -33,21 +34,18 @@ import './projectsMonitoringCounters.scss'
 
 const ScheduledJobsCounters = () => {
   const navigate = useNavigate()
-  const { projectName: paramProjectName } = useParams()
+  const { projectName } = useParams()
   const projectStore = useSelector(store => store.projectStore)
   const [showPopup, setShowPopup] = useState(false)
   const anchorRef = useRef(null)
 
-  console.log(projectStore)
   const handleOpenPopUp = () => {
     const width = anchorRef.current?.offsetWidth ?? 0
     setShowPopup(width < 110)
   }
 
   const scheduledData = useMemo(() => {
-    console.log(projectStore.projectSummary.data)
-
-    if (paramProjectName) {
+    if (projectName) {
       const jobs = projectStore.projectSummary.data?.distinct_scheduled_jobs_pending_count || 0
       const workflows =
         projectStore.projectSummary.data?.distinct_scheduled_pipelines_pending_count || 0
@@ -58,7 +56,6 @@ const ScheduledJobsCounters = () => {
         total: jobs + workflows
       }
     }
-    console.log(projectStore.jobsMonitoringData)
     return (
       projectStore.jobsMonitoringData.scheduled || {
         jobs: 0,
@@ -67,7 +64,7 @@ const ScheduledJobsCounters = () => {
       }
     )
   }, [
-    paramProjectName,
+    projectName,
     projectStore.projectSummary.data?.distinct_scheduled_jobs_pending_count,
     projectStore.projectSummary.data?.distinct_scheduled_pipelines_pending_count,
     projectStore.jobsMonitoringData.scheduled
@@ -84,7 +81,7 @@ const ScheduledJobsCounters = () => {
         <StatsCard.Header title="Scheduled">
           <div className="project-card__info">
             <ClockIcon className="project-card__info-icon" />
-            <span>Next 24 hrs</span>
+            {projectName ? <span>24 hrs</span> : <span>Next 24 hrs</span>}
           </div>
         </StatsCard.Header>
         <StatsCard.Row>
@@ -142,12 +139,12 @@ const ScheduledJobsCounters = () => {
             headerIsHidden
             customPosition={{
               element: anchorRef,
-              position: 'bottom-left'
+              position: 'bottom-right'
             }}
           >
             <div className={'card-popup_text'}>
               <div className="card-popup_text_link" onClick={scheduledStats.jobs.link}>
-                Jobs: {scheduledStats.workflows.counter}
+                Runs: {scheduledStats.workflows.counter}
               </div>
               <div className="card-popup_text_link" onClick={scheduledStats.workflows.link}>
                 Workflows: {scheduledStats.workflows.counter}

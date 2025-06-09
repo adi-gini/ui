@@ -40,10 +40,10 @@
     }
 
     &__title {
-      width: 10px;
       position: relative;
       display: flex;
       align-items: center;
+      gap: 6px;
       color: colors.$primary;
       font-weight: normal;
       font-size: 1rem;
@@ -88,6 +88,11 @@
 
     &__title-tip {
       margin-left: 5px;
+    }
+
+    &__title-wrapper {
+      display: flex;
+      align-items: normal;
     }
   }
 }

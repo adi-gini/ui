@@ -17,27 +17,38 @@ illegal under applicable law, and the grant of the foregoing license
 under the Apache 2.0 license is conditioned upon your compliance with
 such restriction.
 */
-import StatsCard from '../../common/StatsCard/StatsCard'
-import Loader from '../../common/Loader/Loader'
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
 
-const ApplicationCounter = () => {
+import Loader from '../../common/Loader/Loader'
+import StatsCard from '../../common/StatsCard/StatsCard'
+import './projectsMonitoringCounters.scss'
+import { useNavigate, useParams } from 'react-router-dom'
+import classNames from 'classnames'
+
+const ModelsAndApplication = () => {
   const projectStore = useSelector(store => store.projectStore)
-  const { projectName: paramProjectName } = useParams()
+  const { projectName } = useParams()
+  const navigate = useNavigate()
 
-  //TODO: moke-data
-  const applicationData = paramProjectName
-    ? projectStore.projectSummary.data?.application_counter || 0
-    : projectStore.jobsMonitoringData?.application_counter || 0
+  const applicationData = projectName
+    ? projectStore.projectSummary.data?.application_count || 0
+    : projectStore.jobsMonitoringData?.application?.total || 0
 
   return (
     <StatsCard className="monitoring-stats">
-      <StatsCard.Header title="Applications"></StatsCard.Header>
+      <StatsCard.Header title="Application"></StatsCard.Header>
       <StatsCard.Row>
-        <div className="stats__counter_header" data-testid="application_total_counter">
-          <div>
+        <div
+          className={classNames('stats__counter_header', {
+            stats__link: projectName
+          })}
+          data-testid="application_total_counter"
+          onClick={() => {
+            projectName && navigate(`/projects/${projectName}/monitoring-app`)
+          }}
+        >
+          <div className="stats__counter">
             {projectStore.projectsSummary.loading ? (
               <Loader section small secondary />
             ) : (
@@ -49,4 +60,5 @@ const ApplicationCounter = () => {
     </StatsCard>
   )
 }
-export default ApplicationCounter
+
+export default React.memo(ModelsAndApplication)
