@@ -16,7 +16,12 @@
       "distinct_scheduled_pipelines_pending_count": 0,
       "pipelines_completed_recent_count": 0,
       "pipelines_failed_recent_count": 0,
-      "pipelines_running_count": 0
+      "pipelines_running_count": 0,
+      "datasets_count": 2,
+      "documents_count": 3,
+      "llm_prompts_count": 1,
+      "failed_model_monitoring_functions": 4,
+      "running_model_monitoring_functions": 2
     },
     {
       "name": "cat-vs-dog-classification",
@@ -34,7 +39,12 @@
       "distinct_scheduled_pipelines_pending_count": 0,
       "pipelines_completed_recent_count": 0,
       "pipelines_failed_recent_count": 0,
-      "pipelines_running_count": 0
+      "pipelines_running_count": 0,
+      "datasets_count": 1,
+      "documents_count": 4,
+      "llm_prompts_count": 2,
+      "failed_model_monitoring_functions": 3,
+      "running_model_monitoring_functions": 1
     },
     {
       "name": "churn-project-admin",
@@ -49,7 +59,12 @@
       "distinct_scheduled_pipelines_pending_count": 0,
       "pipelines_completed_recent_count": 0,
       "pipelines_failed_recent_count": 0,
-      "pipelines_running_count": 0
+      "pipelines_running_count": 0,
+      "datasets_count": 4,
+      "documents_count": 2,
+      "llm_prompts_count": 3,
+      "failed_model_monitoring_functions": 1,
+      "running_model_monitoring_functions": 3
     },
     {
       "name": "default",
@@ -67,7 +82,12 @@
       "distinct_scheduled_pipelines_pending_count": 0,
       "pipelines_completed_recent_count": 0,
       "pipelines_failed_recent_count": 0,
-      "pipelines_running_count": 0
+      "pipelines_running_count": 0,
+      "datasets_count": 2,
+      "documents_count": 1,
+      "llm_prompts_count": 4,
+      "failed_model_monitoring_functions": 2,
+      "running_model_monitoring_functions": 1
     },
     {
       "name": "fraud-demo2-admin",
@@ -85,7 +105,12 @@
       "distinct_scheduled_pipelines_pending_count": 0,
       "pipelines_completed_recent_count": 0,
       "pipelines_failed_recent_count": 0,
-      "pipelines_running_count": 0
+      "pipelines_running_count": 0,
+      "datasets_count": 3,
+      "documents_count": 2,
+      "llm_prompts_count": 2,
+      "failed_model_monitoring_functions": 1,
+      "running_model_monitoring_functions": 4
     },
     {
       "name": "fsdemo-admin",
